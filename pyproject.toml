@@ -1,0 +1,11 @@
+[project]
+name = "DTS_GestureRecognizer"
+version = "0.1.0"
+description = "Python project for Danish sign language recognition"
+requires-python = ">=3.11"
+
+dependencies = [
+    "opencv-python",
+    "mediapipe",
+    "numpy",
+]
