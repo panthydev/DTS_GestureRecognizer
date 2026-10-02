@@ -8,4 +8,5 @@ dependencies = [
     "opencv-python",
     "mediapipe==0.10.35",
     "numpy",
+    "peewee"
 ]

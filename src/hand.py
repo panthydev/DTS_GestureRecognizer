@@ -12,7 +12,7 @@ class Hand:
     rawPositions = {}
     pairWiseDistances = {}
     pairWiseAngles = {}
-    handDirection = HandDirection
+    handDirection = HandDirection.UNDEFINED
     handFactor = 0.0 # left or right handedness probablity, from 0 -> 1
     handThreshold = 0.0
 
