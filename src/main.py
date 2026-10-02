@@ -1,17 +1,17 @@
 import cv2
 import DetectHands
 
-def DetectHands(imageCaptured):
-    DetectHands.DetectHands(imageCaptured)
+def Hands_detect(DetectHands, imageCaptured):
+    landmarkImage = DetectHands.HandsDetect(DetectHands, imageCaptured)
+    return landmarkImage
 
 cap = cv2.VideoCapture(0)
 
 while cap.isOpened():
     ret, imageCaptured = cap.read()
     if ret:
-        landmarkImage = DetectHands(imageCaptured)
-        flipped_img = cv2.flip(landmarkImage, 1)
-        cv2.imshow("img", flipped_img)
+        landmarkImage = Hands_detect(DetectHands.DetectHands, imageCaptured)
+        cv2.imshow("img", landmarkImage)
         key = cv2.waitKey(1)
         if key == 27:
             break
