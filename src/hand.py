@@ -1,4 +1,7 @@
-﻿from HandDirection import HandDirection
+﻿from mediapipe.tasks.python.components.containers.landmark import NormalizedLandmark
+
+
+from HandDirection import HandDirection
 
 
 class Hand:
@@ -9,12 +12,12 @@ class Hand:
 
 
 
-    rawPositions = {}
-    pairWiseDistances = {}
-    pairWiseAngles = {}
-    handDirection = HandDirection.UNDEFINED
-    handFactor = 0.0 # left or right handedness probablity, from 0 -> 1
-    handThreshold = 0.0
+    rawPositions : dict[tuple[int, int], NormalizedLandmark] = {}
+    pairWiseDistances : dict[tuple[int, int], float] = {}
+    pairWiseAngles : dict[tuple[int, int], float] = {}
+    handDirection : HandDirection = HandDirection.UNDEFINED
+    handFactor : float # left or right handedness probablity, from 0 -> 1
+    handThreshold  : float
 
 
     def __init__(self):
