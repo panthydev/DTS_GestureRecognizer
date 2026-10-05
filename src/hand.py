@@ -11,14 +11,17 @@ class Hand:
     """
 
 
+    def __init__(self, detectionResult):
+        j = 0
+        self.rawPositions : dict[tuple[int, int], NormalizedLandmark] = {}
+        self.pairWiseDistances : dict[tuple[int, int], float] = {}
+        self.pairWiseAngles : dict[tuple[int, int], float] = {}
+        self.handDirection : HandDirection = HandDirection.UNDEFINED
+        self.handFactor : float # left or right handedness probablity, from 0 -> 1
+        self.handThreshold  : float
 
-    rawPositions : dict[tuple[int, int], NormalizedLandmark] = {}
-    pairWiseDistances : dict[tuple[int, int], float] = {}
-    pairWiseAngles : dict[tuple[int, int], float] = {}
-    handDirection : HandDirection = HandDirection.UNDEFINED
-    handFactor : float # left or right handedness probablity, from 0 -> 1
-    handThreshold  : float
-
-
-    def __init__(self):
+        for landmarkPosition in detectionResult.hand_landmarks[0]:
+            self.rawPositions[j] = landmarkPosition
+            j += 1
         pass
+
