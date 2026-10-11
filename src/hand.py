@@ -11,7 +11,7 @@ class Hand:
     """
 
 
-    def __init__(self, detectionResult):
+    def __init__(self):
         j = 0
         self.rawPositions : dict[tuple[int, int], NormalizedLandmark] = {}
         self.pairWiseDistances : dict[tuple[int, int], float] = {}
@@ -19,9 +19,4 @@ class Hand:
         self.handDirection : HandDirection = HandDirection.UNDEFINED
         self.handFactor : float # left or right handedness probablity, from 0 -> 1
         self.handThreshold  : float
-
-        for landmarkPosition in detectionResult.hand_landmarks[0]:
-            self.rawPositions[j] = landmarkPosition
-            j += 1
-        pass
 
