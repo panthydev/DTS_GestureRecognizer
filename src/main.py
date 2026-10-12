@@ -13,6 +13,8 @@ handsData = HandsData()
 
 cap = cv2.VideoCapture(0)
 
+CalHands.CreateKeys(CalHands, 21)
+
 while cap.isOpened():
     ret, imageCaptured = cap.read()
     if ret:
