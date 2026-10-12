@@ -10,7 +10,6 @@ class Hand:
 
     """
 
-
     def __init__(self):
         j = 0
         self.rawPositions : dict[tuple[int, int], NormalizedLandmark] = {}
@@ -19,5 +18,3 @@ class Hand:
         self.handDirection : str 
         self.handFactor : float # left or right handedness probablity, from 0 -> 1
         self.handThreshold  : float
-
-

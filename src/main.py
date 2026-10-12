@@ -1,7 +1,7 @@
 import cv2
 import DetectHands
 from hand import Hand
-from CalculateHands import CreateKeys
+from CalculateHands import Calculate_Hands as CalHands
 from DetectHands import DetectHands
 from Hands_Data import HandsData
 
@@ -10,8 +10,6 @@ def Hands_detect(DetectHands, imageCaptured, handsData):
     return landmarkImage
 
 handsData = HandsData()
-
-CreateKeys(21)
 
 cap = cv2.VideoCapture(0)
 

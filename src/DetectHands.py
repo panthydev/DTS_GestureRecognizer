@@ -4,7 +4,7 @@ from mediapipe.tasks import python
 import numpy as np
 import math
 from pprint import pprint
-import CalculateHands as CalHand
+from CalculateHands import Calculate_Hands as CalHands
 from hand import Hand
 from Hands_Data import HandsData
 
@@ -27,40 +27,6 @@ class DetectHands:
             mp_drawing.draw_landmarks(img_copy, hand_landmarks, mp_hands.HAND_CONNECTIONS, mp_drawing_styles.get_default_hand_landmarks_style(), mp_drawing_styles.get_default_hand_connections_style())
         return img_copy
 
-    def UpdateHandData(self, handToUpdate, handsData, handIndex):
-        if(handToUpdate == "Right"):
-            #handsData.rightHand.rawPositions = self.detection_result.hand_landmarks[handIndex]
-            #handsData.rightHand.handFactor = self.detection_result.handedness[handIndex][0].score
-
-            handsData.UpdateHands(handToUpdate, self.detection_result, handIndex)
-
-            #handsData.rightHand.pairWiseAngles = CalHand.CalulateAngle(self.detection_result.hand_landmarks[handIndex])
-            #handsData.rightHand.pairWiseDistances = CalHand.CalulateDistance(self.detection_result.hand_landmarks[handIndex])
-
-        elif(handToUpdate == "Left"):
-            #handsData.leftHand.rawPositions = self.detection_result.hand_landmarks[handIndex]
-            #handsData.leftHand.handFactor = self.detection_result.handedness[handIndex][0].score
-
-            handsData.UpdateHands(handToUpdate, self.detection_result, handIndex)
-
-            #handsData.leftHand.pairWiseAngles = CalHand.CalulateAngle(self.detection_result.hand_landmarks[handIndex])
-            #handsData.leftHand.pairWiseDistances = CalHand.CalulateDistance(self.detection_result.hand_landmarks[handIndex])
-            
-
-    def CheckForHandToUpdate(self, handsData):
-        handDetected = None
-        for handIndex in range(len(self.detection_result.handedness)):
-
-            handsData.UpdateDirections(self.detection_result)
-
-
-            if(self.detection_result.handedness[handIndex][0].display_name == "Right"):
-                handDetected = "Right"
-                self.UpdateHandData(DetectHands, handDetected, handsData, handIndex)
-            else:   
-                handDetected = "Left"
-                self.UpdateHandData(DetectHands, handDetected, handsData, handIndex)
-
 
     def HandsDetect(self, image, handsData : HandsData):
         rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -68,7 +34,7 @@ class DetectHands:
         
         self.detection_result = detector.detect(img)
 
-        handsData.UpdateDirections(self.detection_result, handsData)
+        handsData.UpdateDirections(self.detection_result)
 
         drawn_image = self.draw_landmarks(img.numpy_view(), self.detection_result)
 
