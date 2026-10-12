@@ -6,6 +6,7 @@ import math
 from pprint import pprint
 import CalculateHands as CalHand
 from hand import Hand
+from Hands_Data import HandsData
 
 base_options = python.BaseOptions(model_asset_path="src\hand_landmarker.task")
 options = mp.tasks.vision.HandLandmarkerOptions(base_options=base_options, num_hands=2)
@@ -28,38 +29,46 @@ class DetectHands:
 
     def UpdateHandData(self, handToUpdate, handsData, handIndex):
         if(handToUpdate == "Right"):
-            handsData.rightHand.rawPositions = self.detection_result.hand_landmarks[handIndex]
-            handsData.rightHand.handFactor = self.detection_result.handedness[handIndex][0].score
+            #handsData.rightHand.rawPositions = self.detection_result.hand_landmarks[handIndex]
+            #handsData.rightHand.handFactor = self.detection_result.handedness[handIndex][0].score
 
-            handsData.rightHand.pairWiseAngles = CalHand.CalulateAngle(self.detection_result.hand_landmarks[handIndex])
-            handsData.rightHand.pairWiseDistances = CalHand.CalulateDistance(self.detection_result.hand_landmarks[handIndex])
+            handsData.UpdateHands(handToUpdate, self.detection_result, handIndex)
+
+            #handsData.rightHand.pairWiseAngles = CalHand.CalulateAngle(self.detection_result.hand_landmarks[handIndex])
+            #handsData.rightHand.pairWiseDistances = CalHand.CalulateDistance(self.detection_result.hand_landmarks[handIndex])
 
         elif(handToUpdate == "Left"):
-            handsData.leftHand.rawPositions = self.detection_result.hand_landmarks[handIndex]
-            handsData.leftHand.handFactor = self.detection_result.handedness[handIndex][0].score
+            #handsData.leftHand.rawPositions = self.detection_result.hand_landmarks[handIndex]
+            #handsData.leftHand.handFactor = self.detection_result.handedness[handIndex][0].score
 
-            handsData.leftHand.pairWiseAngles = CalHand.CalulateAngle(self.detection_result.hand_landmarks[handIndex])
-            handsData.leftHand.pairWiseDistances = CalHand.CalulateDistance(self.detection_result.hand_landmarks[handIndex])
+            handsData.UpdateHands(handToUpdate, self.detection_result, handIndex)
+
+            #handsData.leftHand.pairWiseAngles = CalHand.CalulateAngle(self.detection_result.hand_landmarks[handIndex])
+            #handsData.leftHand.pairWiseDistances = CalHand.CalulateDistance(self.detection_result.hand_landmarks[handIndex])
             
 
     def CheckForHandToUpdate(self, handsData):
         handDetected = None
-        for hand in range(len(self.detection_result.handedness)):
-            if(self.detection_result.handedness[hand][0].display_name == "Right"):
+        for handIndex in range(len(self.detection_result.handedness)):
+
+            handsData.UpdateDirections(self.detection_result)
+
+
+            if(self.detection_result.handedness[handIndex][0].display_name == "Right"):
                 handDetected = "Right"
-                self.UpdateHandData(DetectHands, handDetected, handsData, hand)
+                self.UpdateHandData(DetectHands, handDetected, handsData, handIndex)
             else:   
                 handDetected = "Left"
-                self.UpdateHandData(DetectHands, handDetected, handsData, hand)
+                self.UpdateHandData(DetectHands, handDetected, handsData, handIndex)
 
 
-    def HandsDetect(self, image, handsData):
+    def HandsDetect(self, image, handsData : HandsData):
         rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         img = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
         
         self.detection_result = detector.detect(img)
 
-        self.CheckForHandToUpdate(DetectHands, handsData)
+        handsData.UpdateDirections(self.detection_result, handsData)
 
         drawn_image = self.draw_landmarks(img.numpy_view(), self.detection_result)
 

@@ -16,7 +16,8 @@ class Hand:
         self.rawPositions : dict[tuple[int, int], NormalizedLandmark] = {}
         self.pairWiseDistances : dict[tuple[int, int], float] = {}
         self.pairWiseAngles : dict[tuple[int, int], float] = {}
-        self.handDirection : HandDirection = HandDirection.UNDEFINED
+        self.handDirection : str 
         self.handFactor : float # left or right handedness probablity, from 0 -> 1
         self.handThreshold  : float
+
 
