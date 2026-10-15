@@ -22,6 +22,8 @@ class HandsData:
             self.CalculateHands(handDirection)
 
     def CalculateHands(self, handDirection):
-        print(handDirection)
-        self.HandsDictionary[handDirection].pairWiseDistances = CalHands.CalulateDistance(CalHands, self.HandsDictionary[handDirection].rawPositions, handDirection)
-        self.HandsDictionary[handDirection].pairWiseAngles = CalHands.CalulateAngle(CalHands, self.HandsDictionary[handDirection].rawPositions, handDirection)
+        self.HandsDictionary[handDirection].pairWiseDistances = CalHands.CalulateDistance(
+        CalHands, self.HandsDictionary[handDirection].rawPositions, handDirection)
+
+        self.HandsDictionary[handDirection].pairWiseAngles = CalHands.CalulateAngle(
+        CalHands, self.HandsDictionary[handDirection].rawPositions, handDirection)
