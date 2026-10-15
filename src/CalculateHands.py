@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from Utils import Utils
+import Util
 
 class Calculate_Hands: 
 
@@ -40,7 +40,7 @@ class Calculate_Hands:
             for k in range(len(landmarks)):
                 if k > i:
                     #point_distance = math.sqrt((landmarks[i].x - landmarks[k].x) ** 2+(landmarks[i].y-landmarks[k].y) ** 2+(landmarks[i].z-landmarks[k].z) ** 2)
-                    point_distance = Utils.distanceBetweenPoints(landmarks, i, k)
+                    point_distance = Util.distanceBetweenPoints(landmarks, i, k)
                     self.dictDistancesDicts[dictToUpdate][i,k] = point_distance
         return(self.dictDistancesDicts[dictToUpdate])
 
@@ -50,7 +50,7 @@ class Calculate_Hands:
             for k in range(len(landmarks)):
                 if k > i:
                     #point_angle = math.acos((landmarks[i].x*landmarks[k].x + landmarks[i].y*landmarks[k].y + landmarks[i].z*landmarks[k].z)/(math.sqrt(landmarks[i].x ** 2 + landmarks[i].y ** 2 + landmarks[i].z ** 2) * math.sqrt(landmarks[k].x ** 2 + landmarks[k].y ** 2 + landmarks[k].z ** 2)))
-                    point_angle = Utils.angleBetweenPoints(landmarks, i, k)
+                    point_angle = Util.angleBetweenPoints(landmarks, i, k)
                     point_angle = math.degrees(point_angle) #Remove to get the angle in radians instead of degrees
                     self.dictAnglesDicts[dictToUpdate][i,k] = point_angle
         return(self.dictAnglesDicts[dictToUpdate])
