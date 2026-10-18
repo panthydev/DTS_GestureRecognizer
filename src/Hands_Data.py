@@ -7,6 +7,10 @@ class HandsData:
         RightHand = Hand()
         LeftHand = Hand()
         self.HandsDictionary : dict[str, Hand] = {"Right" : RightHand, "Left" : LeftHand}
+        self.pairWiseDistances : dict[tuple[int, int], float] = {}
+        self.pairWiseAngles : dict[tuple[int, int], float] = {}
+        self.pairWiseDistanceWeights : dict[tuple[int, int], float] = {}
+        self.pairWiseAngleWeights : dict[tuple[int, int], float] = {}
 
     def UpdateDirections(self, DetectionResults):
         for i in range(len(DetectionResults.handedness)):
