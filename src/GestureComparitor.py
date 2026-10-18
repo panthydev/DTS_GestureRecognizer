@@ -6,6 +6,7 @@ DistanceTolerance = 0.1
 
 
 # should actually return key to gesture in DB that matches or the match directly
+# currently returns the score of the comparison where 1 is a perfect match and 0 is the worst match possible lmao
 def CompareHandToGestureHand(CurrentHand : Hand, DBHand : Hand) -> float:
 
     SumOfDistanceWeightedSimilarties = 0
@@ -39,9 +40,9 @@ def CompareHandToGestureHand(CurrentHand : Hand, DBHand : Hand) -> float:
     SumOfAngleWeights = 0
 
     for PairAngles in CurrentHand.pairWiseAngles:
-        weight = DBHand.pairWiseAngleWeights[PairDistance]
-        CurrentDistance = CurrentHand.pairWiseAngles[PairDistance]
-        IdealDistance = DBHand.pairWiseAngles[PairDistance]
+        weight = DBHand.pairWiseAngleWeights[PairAngles]
+        CurrentDistance = CurrentHand.pairWiseAngles[PairAngles]
+        IdealDistance = DBHand.pairWiseAngles[PairAngles]
 
         # calculate difference
         difference = abs(CurrentDistance - IdealDistance)
