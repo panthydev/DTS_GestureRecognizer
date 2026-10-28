@@ -27,10 +27,8 @@ class DBHandler:
         hand.rawPositions = json_to_dict(stored.rawPositions)
         hand.pairWiseDistances = json_to_dict(stored.pairWiseDistances)
         hand.pairWiseAngles = json_to_dict(stored.pairWiseAngles)
-
-        hand.handDirection = HandDirection(stored.handDirection)
-        hand.handFactor = stored.handFactor
-        hand.handThreshold = stored.handThreshold
+        hand.pairWiseDistanceWeights = json_to_dict(stored.pairWiseDistanceWeights)
+        hand.pairWiseAngleWeights = json_to_dict(stored.pairWiseAngleWeights)
 
         return hand
 
