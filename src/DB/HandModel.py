@@ -11,6 +11,8 @@ class HandModel(Model):
     rawPositions = JSONField()
     pairWiseDistances = JSONField()
     pairWiseAngles = JSONField()
+    pairWiseDistanceWeights = JSONField()
+    pairWiseAngleWeights = JSONField()
 
     handDirection = JSONField()
 

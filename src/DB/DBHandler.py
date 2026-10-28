@@ -1,6 +1,7 @@
 ﻿from DataBase import db
 from HandDirection import HandDirection
 from HandModel import HandModel
+from Hands_Data import HandsData
 from hand import Hand
 from Util import dict_to_json, json_to_dict
 
@@ -10,14 +11,12 @@ class DBHandler:
         db.create_tables([HandModel])
 
 
-    def SaveHand(self, hand):
+    def SaveHand(self, handsData : HandsData):
         HandModel.create(
-            rawPositions=dict_to_json(hand.rawPositions),
-            pairWiseDistances=dict_to_json(hand.pairWiseDistances),
-            pairWiseAngles=dict_to_json(hand.pairWiseAngles),
-            HandDirection=hand.HandDirection.value,
-            handFactor=hand.HandFactor,
-            handThreshold=hand.HandThreshold,
+            pairWiseDistances=dict_to_json(handsData.pairWiseDistances),
+            pairWiseAngles=dict_to_json(handsData.pairWiseAngles),
+            pairWiseDistanceWeights=dict_to_json(handsData.pairWiseAngleWeights),
+            pairWiseAngleWeights=dict_to_json(handsData.pairWiseAngleWeights)
         )
 
     def GetHandById(self,id):
