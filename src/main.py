@@ -4,6 +4,7 @@ from hand import Hand
 from CalculateHands import Calculate_Hands as CalHands
 from DetectHands import DetectHands
 from Hands_Data import HandsData
+import GestureComparitor as GestureCom
 
 def Hands_detect(DetectHands, imageCaptured, handsData):
     landmarkImage = DetectHands.HandsDetect(DetectHands, imageCaptured, handsData)
@@ -19,6 +20,7 @@ while cap.isOpened():
     ret, imageCaptured = cap.read()
     if ret:
         landmarkImage = Hands_detect(DetectHands, imageCaptured, handsData)
+        GestureCom.CompareHandToAllGestures(handsData, handsData)
         cv2.imshow("img", landmarkImage)
         key = cv2.waitKey(1)
         if key == 27:
