@@ -7,6 +7,9 @@ class HandsData:
         RightHand = Hand()
         LeftHand = Hand()
         self.HandsDictionary : dict[str, Hand] = {"Right" : RightHand, "Left" : LeftHand}
+
+        self.rawPositions : dict[int, float] = {}
+
         self.pairWiseDistances : dict[tuple[int, int], float] = {}
         self.pairWiseAngles : dict[tuple[int, int], float] = {}
         self.pairWiseDistanceWeights : dict[tuple[int, int], float] = {}
@@ -23,11 +26,18 @@ class HandsData:
 
             self.HandsDictionary[handDirection].handFactor = DetectionResults.handedness[i][0].score
 
-            self.CalculateHands(handDirection)
+        h = 0
+        for hand in self.HandsDictionary:
+            for pos in range(len(self.HandsDictionary[hand].rawPositions)):
+                self.rawPositions[h] = self.HandsDictionary[hand].rawPositions[pos]
+                h += 1
 
-    def CalculateHands(self, handDirection):
-        self.HandsDictionary[handDirection].pairWiseDistances = CalHands.CalulateDistance(
-        CalHands, self.HandsDictionary[handDirection].rawPositions, handDirection)
+        self.CalculateHands()
 
-        self.HandsDictionary[handDirection].pairWiseAngles = CalHands.CalulateAngle(
-        CalHands, self.HandsDictionary[handDirection].rawPositions, handDirection)
+    def CalculateHands(self):
+        #self.HandsDictionary[handDirection].pairWiseDistances = CalHands.CalulateDistance(
+        #CalHands, self.HandsDictionary[handDirection].rawPositions, handDirection)
+        #self.HandsDictionary[handDirection].pairWiseAngles = CalHands.CalulateAngle(
+        #CalHands, self.HandsDictionary[handDirection].rawPositions, handDirection)
+        self.pairWiseDistances = CalHands.CalulateDistance(CalHands, self.rawPositions)
+        self.pairWiseAngles = CalHands.CalulateAngle(CalHands, self.rawPositions)

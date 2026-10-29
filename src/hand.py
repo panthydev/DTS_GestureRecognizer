@@ -12,7 +12,7 @@ class Hand:
 
     def __init__(self):
         j = 0
-        self.rawPositions : dict[tuple[int, int], NormalizedLandmark] = {}
+        self.rawPositions : list[NormalizedLandmark] = {}
         self.pairWiseDistances : dict[tuple[int, int], float] = {}
         self.pairWiseAngles : dict[tuple[int, int], float] = {}
         self.handDirection : str # "Left" "Right"
