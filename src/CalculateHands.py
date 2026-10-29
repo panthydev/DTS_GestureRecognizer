@@ -13,10 +13,14 @@ class Calculate_Hands:
 
     distancesDict = {}
     anglesDict = {}
+    DistanceWeightsDict = {}
+    AngleWeightsDict = {}
 
     def CreateKeys(self, numHandLandmarks):
         self.CreateDistanceKeys(self, numHandLandmarks)
         self.CreateAngleKeys(self, numHandLandmarks)
+        self.CreateDistanceWeightKeys(self, numHandLandmarks)
+        self.CreateAngleWeightKeys(self, numHandLandmarks)
 
 #Creates a key value pair for each point to the other, for distance calculations
     def CreateDistanceKeys(self, numHandLandmarks):
@@ -33,6 +37,22 @@ class Calculate_Hands:
                 if k > i:
                     key: tuple[int ,int] = (i,k)
                     self.anglesDict.update({key: 0})
+
+    def CreateAngleWeightKeys(self, numHandLandmarks):
+        for i in range(numHandLandmarks):
+            for k in range(numHandLandmarks):
+                if k > i:
+                    key: tuple[int ,int] = (i,k)
+                    self.AngleWeightsDict.update({key: 0})
+
+
+    def CreateDistanceWeightKeys(self, numHandLandmarks):
+        for i in range(numHandLandmarks):
+            for k in range(numHandLandmarks):
+                if k > i:
+                    key: tuple[int ,int] = (i,k)
+                    self.DistanceWeightsDict.update({key: 0})
+
 
 #Udregner distancen mellem to punkter
     def CalulateDistance(self, landmarks) -> dict[tuple[int,int], float] :

@@ -1,6 +1,7 @@
 ﻿from DataBase import db
 from HandDirection import HandDirection
 from HandModel import HandModel
+from Hands_Data import HandsData
 from hand import Hand
 from Util import dict_to_json, json_to_dict
 
@@ -10,30 +11,28 @@ class DBHandler:
         db.create_tables([HandModel])
 
 
-    def SaveHand(self, hand):
-        HandModel.create(
-            rawPositions=dict_to_json(hand.rawPositions),
-            pairWiseDistances=dict_to_json(hand.pairWiseDistances),
-            pairWiseAngles=dict_to_json(hand.pairWiseAngles),
-            HandDirection=hand.HandDirection.value,
-            handFactor=hand.HandFactor,
-            handThreshold=hand.HandThreshold,
+    def SaveHand(self, handsData : HandsData):
+        savedHand = HandModel.create(
+            pairWiseDistances=dict_to_json(handsData.pairWiseDistances),
+            pairWiseAngles=dict_to_json(handsData.pairWiseAngles),
+            pairWiseDistanceWeights=dict_to_json(handsData.pairWiseAngleWeights),
+            pairWiseAngleWeights=dict_to_json(handsData.pairWiseAngleWeights),
+            name=str(handsData.name)
         )
+        return savedHand
 
     def GetHandById(self,id):
         stored = HandModel.get_by_id(id)
 
-        hand = Hand()
+        handData = HandsData()
 
-        hand.rawPositions = json_to_dict(stored.rawPositions)
-        hand.pairWiseDistances = json_to_dict(stored.pairWiseDistances)
-        hand.pairWiseAngles = json_to_dict(stored.pairWiseAngles)
 
-        hand.handDirection = HandDirection(stored.handDirection)
-        hand.handFactor = stored.handFactor
-        hand.handThreshold = stored.handThreshold
+        handData.pairWiseDistances = json_to_dict(stored.pairWiseDistances)
+        handData.pairWiseAngles = json_to_dict(stored.pairWiseAngles)
+        handData.pairWiseDistanceWeights = json_to_dict(stored.pairWiseDistanceWeights)
+        handData.pairWiseAngleWeights = json_to_dict(stored.pairWiseAngleWeights)
 
-        return hand
+        return handData
 
 
     
