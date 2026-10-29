@@ -1,5 +1,4 @@
 ﻿from typing import List
-
 import Hands_Data
 import hand
 from hand import Hand
@@ -19,14 +18,14 @@ AngleTolerance = 0.1
 
 # maybe this function should return the key to the matching gesture in the DB but thats for later
 # returns a tuple that has the gesture that "won" and its score
-def CompareHandToAllGestures(CurrentHand : HandsData, AllHands : List[HandsData]) -> tuple[float, Hand] :
+def CompareHandToAllGestures(CurrentHand : HandsData, AllHands : List[HandsData]) -> tuple[HandsData, float] :
 
     FinalScoresDict = {} # idk type hints arent working, its a [float, Hands_Data] dictionary
-
+    
     for HandsDataObj in AllHands:
         #run comparison to gesture and add to the final dictionary
         Score =  CompareGestureToDBGesture(CurrentHand, HandsDataObj)
-        FinalScoresDict[HandsDataObj] = Score
+        FinalScoresDict[Score] = HandsDataObj
 
     closestMatch = (max(FinalScoresDict), FinalScoresDict[max(FinalScoresDict)])
     return closestMatch
@@ -53,7 +52,7 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
         similarity = max(0, 1 - difference / DistanceTolerance)
 
 
-        SumOfDistanceWeightedSimilarties += weight
+        SumOfDistanceWeights += weight
 
         weightedSimilarity = similarity * weight
 
@@ -75,7 +74,7 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
         # calc similarity, will never be negative
         similarity = max(0, 1 - difference / AngleTolerance)
 
-        SumOfAngleWeightedSimilarties += weight
+        SumOfAngleWeights += weight
 
         weightedSimilarity = similarity * weight
 
