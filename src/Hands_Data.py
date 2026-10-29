@@ -4,6 +4,7 @@ from CalculateHands import Calculate_Hands as CalHands
 
 class HandsData:
     def __init__(self):
+        self.name = ""
         RightHand = Hand()
         LeftHand = Hand()
         self.HandsDictionary : dict[str, Hand] = {"Right" : RightHand, "Left" : LeftHand}

@@ -8,16 +8,11 @@ from DataBase import db
 
 class HandModel(Model):
 
-    rawPositions = JSONField()
+    name = TextField()
     pairWiseDistances = JSONField()
     pairWiseAngles = JSONField()
     pairWiseDistanceWeights = JSONField()
     pairWiseAngleWeights = JSONField()
-
-    handDirection = JSONField()
-
-    handFactor = FloatField()
-    handThreshold = FloatField()
 
     class Meta:
         database = db

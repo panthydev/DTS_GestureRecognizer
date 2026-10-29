@@ -12,25 +12,27 @@ class DBHandler:
 
 
     def SaveHand(self, handsData : HandsData):
-        HandModel.create(
+        savedHand = HandModel.create(
             pairWiseDistances=dict_to_json(handsData.pairWiseDistances),
             pairWiseAngles=dict_to_json(handsData.pairWiseAngles),
             pairWiseDistanceWeights=dict_to_json(handsData.pairWiseAngleWeights),
-            pairWiseAngleWeights=dict_to_json(handsData.pairWiseAngleWeights)
+            pairWiseAngleWeights=dict_to_json(handsData.pairWiseAngleWeights),
+            name=str(handsData.name)
         )
+        return savedHand
 
     def GetHandById(self,id):
         stored = HandModel.get_by_id(id)
 
-        hand = Hand()
+        handData = HandsData()
 
-        hand.rawPositions = json_to_dict(stored.rawPositions)
-        hand.pairWiseDistances = json_to_dict(stored.pairWiseDistances)
-        hand.pairWiseAngles = json_to_dict(stored.pairWiseAngles)
-        hand.pairWiseDistanceWeights = json_to_dict(stored.pairWiseDistanceWeights)
-        hand.pairWiseAngleWeights = json_to_dict(stored.pairWiseAngleWeights)
 
-        return hand
+        handData.pairWiseDistances = json_to_dict(stored.pairWiseDistances)
+        handData.pairWiseAngles = json_to_dict(stored.pairWiseAngles)
+        handData.pairWiseDistanceWeights = json_to_dict(stored.pairWiseDistanceWeights)
+        handData.pairWiseAngleWeights = json_to_dict(stored.pairWiseAngleWeights)
+
+        return handData
 
 
     

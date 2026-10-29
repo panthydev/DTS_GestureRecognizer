@@ -8,7 +8,7 @@ from CalculateHands import Calculate_Hands as CalHands
 from hand import Hand
 from Hands_Data import HandsData
 
-base_options = python.BaseOptions(model_asset_path="src\hand_landmarker.task")
+base_options = python.BaseOptions(model_asset_path="hand_landmarker.task")
 options = mp.tasks.vision.HandLandmarkerOptions(base_options=base_options, num_hands=2)
 detector = mp.tasks.vision.HandLandmarker.create_from_options(options)
 
@@ -28,7 +28,7 @@ class DetectHands:
         return img_copy
 
 
-    def HandsDetect(self, image, handsData : HandsData): #We use this function to detect the hands present in the input image 
+    def HandsDetect(self, image, handsData : HandsData): #We use this function to detect the hands present in the input image
 
         rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) #We use this cv2 function to transform the input image into a rgb image
 
