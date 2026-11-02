@@ -1,6 +1,6 @@
-﻿from DataBase import db
+﻿from DB.DataBase import db
 from HandDirection import HandDirection
-from HandModel import HandModel
+from DB.HandModel import HandModel
 from Hands_Data import HandsData
 from hand import Hand
 from Util import dict_to_json, json_to_dict
@@ -10,6 +10,10 @@ class DBHandler:
         db.connect()
         db.create_tables([HandModel])
 
+
+
+    def CursedSaveImage(self, handsData):
+        pass
 
     def SaveHand(self, handsData : HandsData):
         savedHand = HandModel.create(

@@ -5,6 +5,7 @@ from CalculateHands import Calculate_Hands as CalHands
 class HandsData:
     def __init__(self):
         self.name = ""
+        self.image = None #supposed to be the image with landmarks
         RightHand : Hand = Hand()
         LeftHand : Hand = Hand()
         self.HandsDictionary : dict[str, Hand] = {"Right" : RightHand, "Left" : LeftHand}
