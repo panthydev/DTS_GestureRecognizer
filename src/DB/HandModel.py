@@ -1,9 +1,9 @@
-﻿import pickletools
+﻿
 
 from peewee import Model, FloatField, TextField, JSONField
 
 
-from DataBase import db
+from DB.DataBase import db
 
 
 class HandModel(Model):
