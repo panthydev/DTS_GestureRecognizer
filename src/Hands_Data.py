@@ -1,6 +1,7 @@
 ﻿from hand import Hand
 import HandDirection
 from CalculateHands import Calculate_Hands as CalHands
+import mediapipe as mp
 
 class HandsData:
     def __init__(self):
@@ -28,7 +29,7 @@ class HandsData:
             
             self.HandsDictionary[handDirection].handDirection = handDirection 
 
-            self.HandsDictionary[handDirection].rawPositions = DetectionResults.hand_landmarks[i]
+            self.HandsDictionary[handDirection].rawPositions = DetectionResults.hand_world_landmarks[i]
 
             self.HandsDictionary[handDirection].handFactor = DetectionResults.handedness[i][0].score
 

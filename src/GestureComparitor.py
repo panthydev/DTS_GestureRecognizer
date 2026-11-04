@@ -18,9 +18,11 @@ AngleTolerance = 0.1
 
 # maybe this function should return the key to the matching gesture in the DB but thats for later
 # returns a tuple that has the gesture that "won" and its score
-def CompareHandToAllGestures(CurrentHand : HandsData, AllHands : List[HandsData]) -> tuple[HandsData, float] :
+def CompareHandToAllGestures(CurrentHand : HandsData, AllHands : List[HandsData]) -> tuple[float, HandsData] :
 
     FinalScoresDict = {} # idk type hints arent working, its a [float, Hands_Data] dictionary
+
+
     
     for HandsDataObj in AllHands:
         #run comparison to gesture and add to the final dictionary
