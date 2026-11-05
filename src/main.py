@@ -14,7 +14,7 @@ handsData = HandsData()
 
 cap = cv2.VideoCapture(0)
 
-CalHands.CreateKeys(CalHands, 42)
+#CalHands.CreateKeys(CalHands, 42)
 
 dbHandler = DBH.DBHandler()
 

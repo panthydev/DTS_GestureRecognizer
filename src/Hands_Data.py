@@ -45,5 +45,11 @@ class HandsData:
         self.pairWiseDistances = CalHands.CalulateDistance(CalHands, self.rawPositions)
         self.pairWiseAngles = CalHands.CalulateAngle(CalHands, self.rawPositions)
 
+        for hand in self.HandsDictionary:
+            self.HandsDictionary[hand].pairWiseDistances = CalHands.CalulateDistance(CalHands, self.HandsDictionary[hand].rawPositions)
+            self.HandsDictionary[hand].pairWiseAngles = CalHands.CalulateAngle(CalHands, self.HandsDictionary[hand].rawPositions)
+        
         self.pairWiseDistanceWeights = CalHands.AssignWeightAngles(CalHands, 42)
         self.pairWiseAngleWeights = CalHands.AssignWeightDistance(CalHands, 42)
+
+    

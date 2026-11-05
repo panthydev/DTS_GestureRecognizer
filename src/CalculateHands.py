@@ -17,7 +17,7 @@ class Calculate_Hands:
                 for k in range(numHandLandmarks):
                     if k > i:
                         key: tuple[int ,int] = (i,k)
-                        list.update({key: 1})
+                        list.update({key: 0.5})
 
 #Udregner distancen mellem to punkter
     def CalulateDistance(self, landmarks) -> dict[tuple[int,int], float] :

@@ -51,8 +51,8 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
         difference = abs(CurrentDistance - IdealDistance)
 
         #calc similarity, will never be negative
-        similarity = max(0, 1 - difference / DistanceTolerance)
-
+        #similarity = max(0, (1 - difference) / 1)
+        similarity = 1 - abs(difference) / (CurrentDistance + IdealDistance)
 
         SumOfDistanceWeights += weight
 
