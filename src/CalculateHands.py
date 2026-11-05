@@ -4,12 +4,10 @@ import Util
 
 class Calculate_Hands: 
 
-    distancesDict = {}
-    anglesDict = {}
     distanceWeightsDict = {}
     angleWeightsDict = {}
 
-    ListOfDicts = [distancesDict, anglesDict, distanceWeightsDict, angleWeightsDict]
+    ListOfDicts = [distanceWeightsDict, angleWeightsDict]
 
     def CreateKeys(self, numHandLandmarks):
         for list in self.ListOfDicts:
@@ -21,21 +19,23 @@ class Calculate_Hands:
 
 #Udregner distancen mellem to punkter
     def CalulateDistance(self, landmarks) -> dict[tuple[int,int], float] :
+        distancesDict = {}
         for i in range(len(landmarks)):
             for k in range(len(landmarks)):
                 if k > i:
                     point_distance = Util.distanceBetweenPoints(landmarks, i, k)
-                    self.distancesDict[i,k] = point_distance
-        return(self.distancesDict)
+                    distancesDict[i,k] = point_distance
+        return(distancesDict)
 
-    def CalulateAngle(self, landmarks) -> dict[tuple[int,int], float] : 
+    def CalulateAngle(self, landmarks) -> dict[tuple[int,int], float] :
+        anglesDict = {} 
         for i in range(len(landmarks)):
             for k in range(len(landmarks)):
                 if k > i:
                     point_angle = Util.angleBetweenPoints(landmarks, i, k)
                     point_angle = math.degrees(point_angle) #Remove to get the angle in radians instead of degrees
-                    self.anglesDict[i,k] = point_angle
-        return(self.anglesDict)
+                    anglesDict[i,k] = point_angle
+        return(anglesDict)
 
     def AssignWeightDistance(self, landmarks) -> dict[tuple[int,int], float]:
         for i in range(landmarks):

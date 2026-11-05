@@ -10,11 +10,9 @@ from DB import DBHandler as DBH
 import msvcrt
 import keyboard
 
-handsData = HandsData()
-
 cap = cv2.VideoCapture(0)
 
-#CalHands.CreateKeys(CalHands, 42)
+CalHands.CreateKeys(CalHands, 42)
 
 dbHandler = DBH.DBHandler()
 
@@ -26,6 +24,7 @@ keypressed = False
 while cap.isOpened():
     ret, imageCaptured = cap.read()
     if ret:
+        handsData = HandsData()
         detectionResults = DetectHands.DetectHandsImage(DetectHands, imageCaptured)
         handsData.UpdateHandObjects(detectionResults)
 
