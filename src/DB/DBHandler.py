@@ -10,8 +10,6 @@ class DBHandler:
         db.connect()
         db.create_tables([HandModel])
 
-
-
     def CursedSaveImage(self, handsData):
         pass
 
@@ -30,13 +28,26 @@ class DBHandler:
 
         handData = HandsData()
 
-
+        handData.name = stored.name
         handData.pairWiseDistances = json_to_dict(stored.pairWiseDistances)
         handData.pairWiseAngles = json_to_dict(stored.pairWiseAngles)
         handData.pairWiseDistanceWeights = json_to_dict(stored.pairWiseDistanceWeights)
         handData.pairWiseAngleWeights = json_to_dict(stored.pairWiseAngleWeights)
 
         return handData
+
+    def GetAllHands(self):
+        DBHands = []
+        HasToLoop = True
+        index = 1
+        try:
+            while HasToLoop:
+                DBHands.append(self.GetHandById(index))
+                index += 1
+        except:
+            HasToLoop = False
+            return DBHands
+
 
 
     
