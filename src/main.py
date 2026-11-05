@@ -26,11 +26,20 @@ while cap.isOpened():
     if ret:
         handsData = HandsData()
         detectionResults = DetectHands.DetectHandsImage(DetectHands, imageCaptured)
+
+        if len(detectionResults.hand_landmarks) == 0:
+            imageCaptured = cv2.putText(imageCaptured, "Ingen hånd", (35, 35), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+            cv2.imshow("img", imageCaptured)
+            key = cv2.waitKey(1)
+            if key == 27:
+                break
+            continue
+
         handsData.UpdateHandObjects(detectionResults)
 
-        #Hand : HandsData = dbHandler.GetHandById(4)
+        Hand : HandsData = dbHandler.GetHandById(4)
 
-        #List = [Hand]
+        List = [Hand]
 
         closetsMatch = GestureCom.CompareHandToAllGestures(handsData, DBHands)
         
