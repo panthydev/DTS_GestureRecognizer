@@ -5,7 +5,7 @@ from hand import Hand
 from Hands_Data import HandsData
 
 DistanceTolerance = 0.1
-AngleTolerance = 0.1
+AngleTolerance = 1
 
 # general notes:
 # Earlier version didn't take into account multi hand gesture, this one does, although i had to torture hands_data to achieve it
@@ -74,7 +74,7 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
         difference = abs(CurrentDistance - IdealDistance)
 
         # calc similarity, will never be negative
-        similarity = max(0, 1 - difference / AngleTolerance)
+        similarity = 1- abs(difference) / (CurrentDistance + IdealDistance)
 
         SumOfAngleWeights += weight
 
