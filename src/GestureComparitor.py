@@ -5,7 +5,7 @@ from hand import Hand
 from Hands_Data import HandsData
 
 DistanceTolerance = 0.1
-AngleTolerance = 0.1
+AngleTolerance = 1
 
 # general notes:
 # Earlier version didn't take into account multi hand gesture, this one does, although i had to torture hands_data to achieve it
@@ -18,9 +18,11 @@ AngleTolerance = 0.1
 
 # maybe this function should return the key to the matching gesture in the DB but thats for later
 # returns a tuple that has the gesture that "won" and its score
-def CompareHandToAllGestures(CurrentHand : HandsData, AllHands : List[HandsData]) -> tuple[HandsData, float] :
+def CompareHandToAllGestures(CurrentHand : HandsData, AllHands : List[HandsData]) -> tuple[float, HandsData] :
 
     FinalScoresDict = {} # idk type hints arent working, its a [float, Hands_Data] dictionary
+
+
     
     for HandsDataObj in AllHands:
         #run comparison to gesture and add to the final dictionary
@@ -49,8 +51,8 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
         difference = abs(CurrentDistance - IdealDistance)
 
         #calc similarity, will never be negative
-        similarity = max(0, 1 - difference / DistanceTolerance)
-
+        #similarity = max(0, (1 - difference) / 1)
+        similarity = 1 - abs(difference) / (CurrentDistance + IdealDistance)
 
         SumOfDistanceWeights += weight
 
@@ -72,7 +74,7 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
         difference = abs(CurrentDistance - IdealDistance)
 
         # calc similarity, will never be negative
-        similarity = max(0, 1 - difference / AngleTolerance)
+        similarity = 1- abs(difference) / (CurrentDistance + IdealDistance)
 
         SumOfAngleWeights += weight
 
