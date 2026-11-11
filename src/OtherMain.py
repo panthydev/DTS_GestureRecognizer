@@ -11,14 +11,18 @@ import msvcrt
 import keyboard
 import numpy as np
 
-def RunDataCreation(imageList : list[np.ndarray]) -> HandsData:
+def RunDataCreation(imageList : list[np.ndarray]) -> list[HandsData]:
 
 
     CalHands.CreateKeys(CalHands, 42)
+    handsDataList = []
 
     for image in imageList:
             handsData = HandsData()
             detectionResults = DetectHands.DetectHandsImage(DetectHands, image)
 
             handsData.UpdateHandObjects(detectionResults)
-            return handsData
+            handsDataList.append(handsData)
+
+
+    return handsDataList
