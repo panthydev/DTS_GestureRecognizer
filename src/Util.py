@@ -25,6 +25,11 @@ def angleBetweenPoints(landmarks, point2, point1) -> float:
     pointAngle = math.acos((landmarks[point2].x*landmarks[point1].x + landmarks[point2].y*landmarks[point1].y + landmarks[point2].z*landmarks[point1].z)/(math.sqrt(landmarks[point2].x ** 2 + landmarks[point2].y ** 2 + landmarks[point2].z ** 2) * math.sqrt(landmarks[point1].x ** 2 + landmarks[point1].y ** 2 + landmarks[point1].z ** 2)))
     return pointAngle
 
+def createVector(point1 : tuple [float, float, float], point2 : tuple[float, float, float]) -> tuple[float, float,float]:
+    vector = [point2[0] - point1[0], point2[1] - point1[1], point2[2] - point1[2]]
+    return vector
+
+
 
 def draw_landmarks(img, detection_results): #We use this function to draw the landsmarks the detection result got from the detector function onto the input image
     """Draws the skeleton on the hand(s) present in the image"""

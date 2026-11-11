@@ -9,6 +9,7 @@ from DB.DataBase import db
 class HandModel(Model):
 
     name = TextField()
+    handOrientation = TextField()
     pairWiseDistances = JSONField()
     pairWiseAngles = JSONField()
     pairWiseDistanceWeights = JSONField()

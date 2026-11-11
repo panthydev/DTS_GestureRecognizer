@@ -18,5 +18,6 @@ class Hand:
         self.handDirection : str # "Left" "Right"
         self.handFactor : float # left or right handedness probablity, from 0 -> 1
         self.handThreshold  : float
+        self.handOrientation : tuple[float, float, float]
         self.pairWiseDistanceWeights : dict[tuple[int, int], float] = {}
         self.pairWiseAngleWeights : dict[tuple[int, int], float] = {}

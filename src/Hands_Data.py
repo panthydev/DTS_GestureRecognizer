@@ -2,6 +2,7 @@
 import HandDirection
 from CalculateHands import Calculate_Hands as CalHands
 import mediapipe as mp
+import Util
 
 class HandsData:
     def __init__(self):
@@ -10,6 +11,8 @@ class HandsData:
         RightHand : Hand = Hand()
         LeftHand : Hand = Hand()
         self.HandsDictionary : dict[str, Hand] = {"Right" : RightHand, "Left" : LeftHand}
+
+        self.handOrientation : tuple[float, float, float] = tuple[0,0,0] 
 
         self.rawPositions : dict[int, float] = {}
 
@@ -22,6 +25,7 @@ class HandsData:
         self.FillHandsRawInfo(DetectionResults)
         self.MergeHands()
         self.CalculateHandGeometry()
+        self.MergeOrientation()
 
     def FillHandsRawInfo(self, DetectionResults):
         for i in range(len(DetectionResults.handedness)):
@@ -40,6 +44,11 @@ class HandsData:
                 self.rawPositions[h] = self.HandsDictionary[hand].rawPositions[pos]
                 h += 1
 
+    def MergeOrientation(self):
+        for hand in self.HandsDictionary:
+            self.handOrientation = tuple(map(sum, zip(self.handOrientation, self.HandsDictionary[hand].handOrientation)))
+        self.handOrientation = Util.normalizeVector(self.handOrientation)
+
     def CalculateHandGeometry(self):
         """Calculates pairwise distances and angles for both hands"""
         self.pairWiseDistances = CalHands.CalulateDistance(CalHands, self.rawPositions)
@@ -47,9 +56,20 @@ class HandsData:
 
         for hand in self.HandsDictionary:
             self.HandsDictionary[hand].pairWiseDistances = CalHands.CalulateDistance(CalHands, self.HandsDictionary[hand].rawPositions)
+
+            self.CalculateHandOrientation(hand)
+
             self.HandsDictionary[hand].pairWiseAngles = CalHands.CalulateAngle(CalHands, self.HandsDictionary[hand].rawPositions)
         
         self.pairWiseDistanceWeights = CalHands.AssignWeightAngles(CalHands, 42)
         self.pairWiseAngleWeights = CalHands.AssignWeightDistance(CalHands, 42)
+
+    def CalculateHandOrientation(self, hand):
+        point1 = self.HandsDictionary[hand].rawPositions[0]
+        point2 = self.HandsDictionary[hand].rawPositions[9]
+
+        handOrientation = Util.createVector(point2, point1)
+
+        self.HandsDictionary[hand].handOrientation = Util.normalizeVector(handOrientation)
 
     

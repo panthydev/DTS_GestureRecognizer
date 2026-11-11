@@ -19,7 +19,8 @@ class DBHandler:
             pairWiseAngles=dict_to_json(handsData.pairWiseAngles),
             pairWiseDistanceWeights=dict_to_json(handsData.pairWiseAngleWeights),
             pairWiseAngleWeights=dict_to_json(handsData.pairWiseAngleWeights),
-            name=str(handsData.name)
+            name=str(handsData.name),
+            handOrientation=str(handsData.handOrientation)
         )
         return savedHand
 
@@ -29,6 +30,7 @@ class DBHandler:
         handData = HandsData()
 
         handData.name = stored.name
+        handData.handOrientation = tuple(stored.handOrientation)
         handData.pairWiseDistances = json_to_dict(stored.pairWiseDistances)
         handData.pairWiseAngles = json_to_dict(stored.pairWiseAngles)
         handData.pairWiseDistanceWeights = json_to_dict(stored.pairWiseDistanceWeights)
