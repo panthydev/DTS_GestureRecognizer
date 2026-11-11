@@ -19,9 +19,12 @@ def RunDataSetCreation(path : str):
 
     subDirs = [f for f in path.iterdir() if f.is_dir()]
 
-    for subDir in subDirs:
-        with open(ResultDirectory / f"{subDir.name}.csv", "w", newline='') as csvFile:
+
+    with open(ResultDirectory / f"DATAAAAA", "w", newline='') as csvFile:
+
+        for subDir in subDirs:
             imageList = []
+
 
             for image in subDir.iterdir():
                 if image.is_file():
