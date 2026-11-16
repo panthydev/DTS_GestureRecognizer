@@ -26,9 +26,28 @@ def angleBetweenPoints(landmarks, point2, point1) -> float:
     return pointAngle
 
 def createVector(point1 : tuple [float, float, float], point2 : tuple[float, float, float]) -> tuple[float, float,float]:
-    vector = [point2[0] - point1[0], point2[1] - point1[1], point2[2] - point1[2]]
+    vector = [point2.x - point1.x, point2.y - point1.y, point2.z - point1.z]
+    vector = tuple(vector)
     return vector
 
+def calculateVectorLenght(vector : tuple[float, float, float]):
+    #listToUse = [1, 4 ,6]
+    #newTuple = tuple(listToUse)
+
+    #newTuple = (1, 4 ,6)
+    
+    vectorLenght = math.sqrt(vector[0]**2 + vector[1]**2 + vector[2]**2)
+    return vectorLenght
+
+
+def normalizeVector(nonNormVector : tuple[float, float, float]):
+    vectorLenght = calculateVectorLenght(nonNormVector)
+
+    normVector = [nonNormVector[0]/vectorLenght, nonNormVector[1]/vectorLenght, nonNormVector[2]/vectorLenght]
+
+    normVector = tuple(normVector)
+
+    return normVector
 
 
 def draw_landmarks(img, detection_results): #We use this function to draw the landsmarks the detection result got from the detector function onto the input image
@@ -39,3 +58,11 @@ def draw_landmarks(img, detection_results): #We use this function to draw the la
     for hand_landmarks in detection_results.hand_landmarks: 
         mp_drawing.draw_landmarks(img_copy, hand_landmarks, mp_hands.HAND_CONNECTIONS, mp_drawing_styles.get_default_hand_landmarks_style(), mp_drawing_styles.get_default_hand_connections_style())
     return img_copy
+
+def StrToTuple(tuple : tuple):
+    list : list = tuple
+
+    list.pop[0]
+    #list.pop[len(list)]
+
+    return list
