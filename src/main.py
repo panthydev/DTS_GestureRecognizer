@@ -11,6 +11,8 @@ import msvcrt
 import keyboard
 
 def RunLiveComparison():
+    global keypressed
+    keypressed = False
     cap = cv2.VideoCapture(0)
 
     CalHands.CreateKeys(CalHands, 42)
@@ -18,9 +20,11 @@ def RunLiveComparison():
     dbHandler = DBH.DBHandler()
 
     DBHands = dbHandler.GetAllHands()
+    for hand in DBHands:
+        hand.handOrientation1 = Util.StrToTuple(hand.handOrientation1)
+        hand.handOrientation2 = Util.StrToTuple(hand.handOrientation2)
 
     keyboard.on_press_key("c", lambda _: globals().update(keypressed=True))
-    keypressed = False
 
     while cap.isOpened():
         ret, imageCaptured = cap.read()
@@ -39,7 +43,7 @@ def RunLiveComparison():
 
             handsData.UpdateHandObjects(detectionResults)
 
-            Hand: HandsData = dbHandler.GetHandById(4)
+            #Hand: HandsData = dbHandler.GetHandById(4)
 
             List = [Hand]
 

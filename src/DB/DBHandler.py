@@ -19,7 +19,9 @@ class DBHandler:
             pairWiseAngles=dict_to_json(handsData.pairWiseAngles),
             pairWiseDistanceWeights=dict_to_json(handsData.pairWiseAngleWeights),
             pairWiseAngleWeights=dict_to_json(handsData.pairWiseAngleWeights),
-            name=str(handsData.name)
+            name=str(handsData.name),
+            handOrientation1=str(handsData.handOrientation1),
+            handOrientation2=str(handsData.handOrientation2)
         )
         return savedHand
 
@@ -29,6 +31,8 @@ class DBHandler:
         handData = HandsData()
 
         handData.name = stored.name
+        handData.handOrientation1 = tuple(stored.handOrientation1)
+        handData.handOrientation2 = tuple(stored.handOrientation2)
         handData.pairWiseDistances = json_to_dict(stored.pairWiseDistances)
         handData.pairWiseAngles = json_to_dict(stored.pairWiseAngles)
         handData.pairWiseDistanceWeights = json_to_dict(stored.pairWiseDistanceWeights)
@@ -36,7 +40,7 @@ class DBHandler:
 
         return handData
 
-    def GetAllHands(self):
+    def GetAllHands(self) -> list[HandsData]:
         DBHands = []
         HasToLoop = True
         index = 1
