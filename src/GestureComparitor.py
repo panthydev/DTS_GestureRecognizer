@@ -84,40 +84,39 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
 
     finalAngleScore = SumOfAngleWeightedSimilarties / SumOfAngleWeights
 
+
+
     handOrientationList = [CurrentHand.handOrientation1, CurrentHand.handOrientation2]
     OrientationSimilarityScore = 0
     SumOfCoordinateWeights = 0
     SumOfCoordinateWeightedSimilarties = 0
+
+    orientationlist = [DBHand.handOrientation1, DBHand.handOrientation2]
     for handOrientation in handOrientationList:
+        otherIndex = 0
         for coordinates in handOrientation:
-            weight = 1
             index = 0
+            
             #weight = DBHand.pairWiseDistanceWeights[PairDistance]
             #CurrentDistance = CurrentHand.pairWiseDistances[PairDistance]
             #IdealDistance = DBHand.pairWiseDistances[PairDistance]
 
             currentCoordinate = coordinates
-            idealCoordinate = DBHand.handOrientation1[index]
+
+            idealCoordinate = orientationlist[otherIndex][index]
             index += 1
     
             #calculate difference
-            difference = abs(currentCoordinate - idealCoordinate)
+            #difference = abs(currentCoordinate - idealCoordinate)
     
             #calc similarity, will never be negative
             #similarity = max(0, (1 - difference) / 1)
-            similarity = 1 - abs(difference) / (currentCoordinate + idealCoordinate)
-    
-            SumOfCoordinateWeights += weight
-    
-            weightedSimilarity = similarity * weight
-    
-            SumOfCoordinateWeightedSimilarties += weightedSimilarity
+            similarity += 1 - ((abs(currentCoordinate - idealCoordinate)) / (abs((currentCoordinate + idealCoordinate))/2))
+        otherIndex += 1
 
-        OrientationSimilarityScore += SumOfCoordinateWeightedSimilarties / SumOfCoordinateWeights
+    finalOrientationSimilarityScore = similarity / 3
 
-    OrientationSimilarityScore / 2
-
-    finalScore = (finalDistanceScore + finalAngleScore + OrientationSimilarityScore) / 3 # we can modify this later and weigh angle or distance more if needed
+    finalScore = (finalDistanceScore + finalAngleScore + finalOrientationSimilarityScore) / 3 # we can modify this later and weigh angle or distance more if needed
 
     return finalScore
 

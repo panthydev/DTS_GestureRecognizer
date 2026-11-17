@@ -20,6 +20,9 @@ def RunLiveComparison():
     dbHandler = DBH.DBHandler()
 
     DBHands = dbHandler.GetAllHands()
+    for hand in DBHands:
+        hand.handOrientation1 = Util.StrToTuple(hand.handOrientation1)
+        hand.handOrientation2 = Util.StrToTuple(hand.handOrientation2)
 
     keyboard.on_press_key("c", lambda _: globals().update(keypressed=True))
 

@@ -59,10 +59,27 @@ def draw_landmarks(img, detection_results): #We use this function to draw the la
         mp_drawing.draw_landmarks(img_copy, hand_landmarks, mp_hands.HAND_CONNECTIONS, mp_drawing_styles.get_default_hand_landmarks_style(), mp_drawing_styles.get_default_hand_connections_style())
     return img_copy
 
-def StrToTuple(tuple : tuple):
-    list : list = tuple
+def StrToTuple(inputTupleString):
+    strList = []
+    for element in inputTupleString:
+        strList.append(element)
 
-    list.pop[0]
-    #list.pop[len(list)]
+    strList.pop(0)
+    strList.pop(len(strList) - 1)
+    strList.append(",")
 
-    return list
+    floatList : list[str, str, str] = []
+    string = "" 
+    for element in strList:
+        if(element == ","):
+            floatList.append(string)
+            string = ""
+        else:
+            string += element
+
+    index = 0
+    for str in floatList:
+        floatList[index] = float(str)
+        index +=1
+
+    return tuple(floatList)
