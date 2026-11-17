@@ -32,6 +32,20 @@ def CompareHandToAllGestures(CurrentHand : HandsData, AllHands : List[HandsData]
     closestMatch = (max(FinalScoresDict), FinalScoresDict[max(FinalScoresDict)])
     return closestMatch
 
+def KeySafetyCheck(CurrentKey : tuple[int, int],CurrentHand : HandsData,  DBHand : HandsData) -> bool:
+
+    KeyList = list(CurrentHand.pairWiseDistances.keys())
+    currIndex = KeyList.index(CurrentKey)
+
+    SafeBoundary = currIndex
+    SafeBoundary += 1
+    if SafeBoundary > len(DBHand.pairWiseDistances):
+        return False
+    else:
+        return True
+
+
+
 # returns the "score" IE how well a gesture matches the DB gesture
 def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> float:
 
@@ -41,6 +55,8 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
 
     #PairDistance is the key
     for PairDistance in CurrentHand.pairWiseDistances:
+
+        if not KeySafetyCheck(PairDistance, CurrentHand, DBHand): break
 
         weight = DBHand.pairWiseDistanceWeights[PairDistance]
         CurrentDistance = CurrentHand.pairWiseDistances[PairDistance]
@@ -66,6 +82,7 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
     SumOfAngleWeights = 0
 
     for PairAngles in CurrentHand.pairWiseAngles:
+        if not KeySafetyCheck(PairAngles, CurrentHand, DBHand): break
         weight = DBHand.pairWiseAngleWeights[PairAngles]
         CurrentDistance = CurrentHand.pairWiseAngles[PairAngles]
         IdealDistance = DBHand.pairWiseAngles[PairAngles]
@@ -93,6 +110,7 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
 
     orientationlist = [DBHand.handOrientation1, DBHand.handOrientation2]
     for handOrientation in handOrientationList:
+        #implemet custom check for multi hand gesture, like the other for loops
         otherIndex = 0
         for coordinates in handOrientation:
             index = 0
