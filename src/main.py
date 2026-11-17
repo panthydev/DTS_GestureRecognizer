@@ -10,6 +10,7 @@ from DB import DBHandler as DBH
 import msvcrt
 import keyboard
 
+
 def RunLiveComparison():
     global keypressed
     keypressed = False
@@ -47,13 +48,24 @@ def RunLiveComparison():
 
             List = [Hand]
 
-            closetsMatch = GestureCom.CompareHandToAllGestures(handsData, DBHands)
+            closestMatch = GestureCom.CompareHandToAllGestures(handsData, DBHands)
 
-            drawnImage = Util.draw_landmarks(imageCaptured, detectionResults)
-            drawnImage = cv2.putText(drawnImage, str(closetsMatch[0]) + " " + str(closetsMatch[1].name), (35, 35),
-                                     cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+            if closestMatch[0] < 0.8:
 
-            handsData.image = drawnImage
+                drawnImage = Util.draw_landmarks(imageCaptured, detectionResults)
+                drawnImage = cv2.putText(drawnImage, str(closestMatch[0]) + " " + str(closestMatch[1].name), (35, 35),
+                                         cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+
+                handsData.image = drawnImage
+            else:
+
+                drawnImage = Util.draw_landmarks(imageCaptured, detectionResults)
+                drawnImage = cv2.putText(drawnImage, "Confidence too low: " + str(closestMatch[0]), (35, 35),
+                                         cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+
+                handsData.image = drawnImage
+
+
 
             if (keypressed):
                 keypressed = False
