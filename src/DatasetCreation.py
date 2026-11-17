@@ -22,6 +22,8 @@ def RunDataSetCreation(path : str):
 
     with open(ResultDirectory / f"DATAAAAA", "w", newline='') as csvFile:
 
+        fieldnames = ["Label", "Landmark", "PairwiseDistance", "PairwiseAngle"]
+
         for subDir in subDirs:
             imageList = []
 
@@ -32,7 +34,7 @@ def RunDataSetCreation(path : str):
                     imageList.append(cvImage)
             HandsDataList = OtherMain.RunDataCreation(imageList)
 
-            fieldnames = ["Label", "Landmark", "PairwiseDistance", "PairwiseAngle"]
+
             #writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
             writer = csv.writer(csvFile)
             writer.writerow(fieldnames)
