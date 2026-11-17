@@ -26,7 +26,7 @@ class HandsData:
         self.FillHandsRawInfo(DetectionResults)
         self.MergeHands()
         self.CalculateHandGeometry()
-      #  self.MergeOrientation()
+        self.MergeOrientation()
 
     def FillHandsRawInfo(self, DetectionResults):
         for i in range(len(DetectionResults.handedness)):
@@ -60,7 +60,7 @@ class HandsData:
         for hand in self.HandsDictionary:
             self.HandsDictionary[hand].pairWiseDistances = CalHands.CalulateDistance(CalHands, self.HandsDictionary[hand].rawPositions)
 
-         #   self.CalculateHandOrientation(hand)
+            self.CalculateHandOrientation(hand)
 
             self.HandsDictionary[hand].pairWiseAngles = CalHands.CalulateAngle(CalHands, self.HandsDictionary[hand].rawPositions)
         
