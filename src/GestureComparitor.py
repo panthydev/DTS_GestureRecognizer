@@ -32,17 +32,12 @@ def CompareHandToAllGestures(CurrentHand : HandsData, AllHands : List[HandsData]
     closestMatch = (max(FinalScoresDict), FinalScoresDict[max(FinalScoresDict)])
     return closestMatch
 
-def KeySafetyCheck(CurrentKey : tuple[int, int],CurrentHand : HandsData,  DBHand : HandsData) -> bool:
+def KeySafetyCheck(CurrentKey : tuple[int, int],  DBHand : HandsData) -> bool:
 
-    KeyList = list(CurrentHand.pairWiseDistances.keys())
-    currIndex = KeyList.index(CurrentKey)
-
-    SafeBoundary = currIndex
-    SafeBoundary += 1
-    if SafeBoundary > len(DBHand.pairWiseDistances):
-        return False
-    else:
+    if CurrentKey in DBHand.pairWiseDistances:
         return True
+    else :
+        return False
 
 
 
@@ -56,7 +51,7 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
     #PairDistance is the key
     for PairDistance in CurrentHand.pairWiseDistances:
 
-        if not KeySafetyCheck(PairDistance, CurrentHand, DBHand): break
+        if not KeySafetyCheck(PairDistance, DBHand): break
 
         weight = DBHand.pairWiseDistanceWeights[PairDistance]
         CurrentDistance = CurrentHand.pairWiseDistances[PairDistance]
@@ -82,7 +77,7 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
     SumOfAngleWeights = 0
 
     for PairAngles in CurrentHand.pairWiseAngles:
-        if not KeySafetyCheck(PairAngles, CurrentHand, DBHand): break
+        if not KeySafetyCheck(PairAngles, DBHand): break
         weight = DBHand.pairWiseAngleWeights[PairAngles]
         CurrentDistance = CurrentHand.pairWiseAngles[PairAngles]
         IdealDistance = DBHand.pairWiseAngles[PairAngles]
