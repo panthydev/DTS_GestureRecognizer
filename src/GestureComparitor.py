@@ -3,6 +3,7 @@ import Hands_Data
 import hand
 from hand import Hand
 from Hands_Data import HandsData
+import Util
 
 DistanceTolerance = 0.1
 AngleTolerance = 1
@@ -97,39 +98,27 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
     finalAngleScore = SumOfAngleWeightedSimilarties / SumOfAngleWeights
 
 
+    DBOrientationList = [DBHand.handOrientation1, DBHand.handOrientation2]
+    currentHandOrientationList = [CurrentHand.handOrientation1, CurrentHand.handOrientation2]
+    finalCosineSimilarityScore = 0
+    i = 0
+    for currentHandOrientation in currentHandOrientationList:  
+        dotProduct = Util.DotProduct(currentHandOrientation, DBOrientationList[i])
+        
+        lenghtCurrentHandOrientation = Util.calculateVectorLenght(currentHandOrientation)
+        lenghtDBHandOrientation = Util.calculateVectorLenght(DBOrientationList[i])
 
-    handOrientationList = [CurrentHand.handOrientation1, CurrentHand.handOrientation2]
-    OrientationSimilarityScore = 0
-    SumOfCoordinateWeights = 0
-    SumOfCoordinateWeightedSimilarties = 0
+        cosineSimilarity = dotProduct/(lenghtCurrentHandOrientation * lenghtDBHandOrientation)
+        cosineSimilarity = (cosineSimilarity + 1) * 0.5
+        #print(cosineSimilarity)
 
-    orientationlist = [DBHand.handOrientation1, DBHand.handOrientation2]
-    for handOrientation in handOrientationList:
-        #implemet custom check for multi hand gesture, like the other for loops
-        otherIndex = 0
-        for coordinates in handOrientation:
-            index = 0
-            
-            #weight = DBHand.pairWiseDistanceWeights[PairDistance]
-            #CurrentDistance = CurrentHand.pairWiseDistances[PairDistance]
-            #IdealDistance = DBHand.pairWiseDistances[PairDistance]
+        finalCosineSimilarityScore += cosineSimilarity
 
-            currentCoordinate = coordinates
+        i += 1
 
-            idealCoordinate = orientationlist[otherIndex][index]
-            index += 1
-    
-            #calculate difference
-            #difference = abs(currentCoordinate - idealCoordinate)
-    
-            #calc similarity, will never be negative
-            #similarity = max(0, (1 - difference) / 1)
-            similarity += 1 - ((abs(currentCoordinate - idealCoordinate)) / (abs((currentCoordinate + idealCoordinate))/2))
-        otherIndex += 1
+    finalCosineSimilarityScore = finalCosineSimilarityScore / 2
 
-    finalOrientationSimilarityScore = similarity / 3
-
-    finalScore = (finalDistanceScore + finalAngleScore + finalOrientationSimilarityScore) / 3 # we can modify this later and weigh angle or distance more if needed
+    finalScore = (finalDistanceScore + finalAngleScore + (finalCosineSimilarityScore)) / 3 # we can modify this later and weigh angle or distance more if needed
 
     return finalScore
 

@@ -30,6 +30,10 @@ def createVector(point1 : tuple [float, float, float], point2 : tuple[float, flo
     vector = tuple(vector)
     return vector
 
+def DotProduct(vectorA : tuple, vectorB : tuple) -> float: 
+    DotProduct = (vectorA[0] * vectorB[0]) + (vectorA[1] * vectorB[1]) + (vectorA[2] * vectorB[2])
+    return DotProduct
+
 def calculateVectorLenght(vector : tuple[float, float, float]):
     #listToUse = [1, 4 ,6]
     #newTuple = tuple(listToUse)
