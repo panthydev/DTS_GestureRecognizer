@@ -50,7 +50,7 @@ def RunLiveComparison():
 
             closestMatch = GestureCom.CompareHandToAllGestures(handsData, DBHands)
 
-            if closestMatch[0] > 0.8:
+            if closestMatch[0] > 0.9:
 
                 drawnImage = Util.draw_landmarks(imageCaptured, detectionResults)
                 drawnImage = cv2.putText(drawnImage, str(closestMatch[0]) + " " + str(closestMatch[1].name), (35, 35),
