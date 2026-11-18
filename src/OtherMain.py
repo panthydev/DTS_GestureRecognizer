@@ -11,11 +11,11 @@ def RunDataCreation(imageList : list[np.ndarray]) -> list[HandsData]:
     handsDataList = []
 
     for image in imageList:
-            handsData = HandsData()
-            detectionResults = DetectHands.DetectHandsImage(DetectHands, image)
+        handsData = HandsData()
+        detectionResults = DetectHands.DetectHandsImage(DetectHands, image)
 
-            handsData.UpdateHandObjects(detectionResults)
-            handsDataList.append(handsData)
+        handsData.UpdateHandObjects(detectionResults)
+        handsDataList.append(handsData)
 
 
     return handsDataList
