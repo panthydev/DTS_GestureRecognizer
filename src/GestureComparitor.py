@@ -3,7 +3,7 @@ import Hands_Data
 import hand
 from hand import Hand
 from Hands_Data import HandsData
-import Util
+import NewMath
 
 DistanceTolerance = 0.1
 AngleTolerance = 1
@@ -23,8 +23,6 @@ def CompareHandToAllGestures(CurrentHand : HandsData, AllHands : List[HandsData]
 
     FinalScoresDict = {} # idk type hints arent working, its a [float, Hands_Data] dictionary
 
-
-    
     for HandsDataObj in AllHands:
         #run comparison to gesture and add to the final dictionary
         Score =  CompareGestureToDBGesture(CurrentHand, HandsDataObj)
@@ -103,14 +101,11 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
     finalCosineSimilarityScore = 0
     i = 0
     for currentHandOrientation in currentHandOrientationList:  
-        dotProduct = Util.DotProduct(currentHandOrientation, DBOrientationList[i])
-        
-        lenghtCurrentHandOrientation = Util.calculateVectorLenght(currentHandOrientation)
-        lenghtDBHandOrientation = Util.calculateVectorLenght(DBOrientationList[i])
+        dotProduct = NewMath.DotProduct(currentHandOrientation, DBOrientationList[i])
 
-        cosineSimilarity = dotProduct/(lenghtCurrentHandOrientation * lenghtDBHandOrientation)
+        cosineSimilarity = dotProduct
+
         cosineSimilarity = (cosineSimilarity + 1) * 0.5
-        #print(cosineSimilarity)
 
         finalCosineSimilarityScore += cosineSimilarity
 

@@ -33,9 +33,10 @@ def RunLiveComparison():
             detectionResults = DetectHands.DetectHandsImage(DetectHands, imageCaptured)
 
             if len(detectionResults.hand_landmarks) == 0:
-                imageCaptured = cv2.putText(imageCaptured, "Ingen hånd", (35, 35), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                FlippedimageCaptured = cv2.flip(imageCaptured, 1)
+                FlippedimageCaptured = cv2.putText(FlippedimageCaptured, "Ingen hånd", (35, 35), cv2.FONT_HERSHEY_SIMPLEX, 1,
                                             (255, 0, 0), 2) 
-                cv2.imshow("img", imageCaptured)
+                cv2.imshow("img", FlippedimageCaptured)
                 key = cv2.waitKey(1)
                 if key == 27:
                     break
@@ -50,10 +51,13 @@ def RunLiveComparison():
             closetsMatch = GestureCom.CompareHandToAllGestures(handsData, DBHands)
 
             drawnImage = Util.draw_landmarks(imageCaptured, detectionResults)
-            drawnImage = cv2.putText(drawnImage, str(closetsMatch[0]) + " " + str(closetsMatch[1].name), (35, 35),
-                                     cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+            
+            flippedImage = cv2.flip(drawnImage, 1)
 
-            handsData.image = drawnImage
+            flippedImage = cv2.putText(flippedImage, str(closetsMatch[0]) + " " + str(closetsMatch[1].name), (35, 35),
+                                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+
+            handsData.image = flippedImage
 
             if (keypressed):
                 keypressed = False
@@ -61,7 +65,7 @@ def RunLiveComparison():
                 storedHand = dbHandler.SaveHand(handsData)
                 print("Capturing gesture, sav)ing to database, exporting image to path: ")
 
-            cv2.imshow("img", drawnImage)
+            cv2.imshow("img", flippedImage)
             key = cv2.waitKey(1)
             if key == 27:
                 break

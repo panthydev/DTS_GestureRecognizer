@@ -3,6 +3,7 @@ import HandDirection
 from CalculateHands import Calculate_Hands as CalHands
 import mediapipe as mp
 import Util
+import NewMath
 
 class HandsData:
     def __init__(self):
@@ -49,8 +50,8 @@ class HandsData:
         for hand in self.HandsDictionary:
             self.handOrientation1 = tuple(map(sum, zip(self.handOrientation1, self.HandsDictionary[hand].handOrientation1)))
             self.handOrientation2 = tuple(map(sum, zip(self.handOrientation2, self.HandsDictionary[hand].handOrientation2)))
-        self.handOrientation1 = Util.normalizeVector(self.handOrientation1)
-        self.handOrientation2 = Util.normalizeVector(self.handOrientation2)
+        self.handOrientation1 = NewMath.normalizeVector(self.handOrientation1)
+        self.handOrientation2 = NewMath.normalizeVector(self.handOrientation2)
 
     def CalculateHandGeometry(self):
         """Calculates pairwise distances and angles for both hands"""
@@ -75,10 +76,10 @@ class HandsData:
             point3 = self.HandsDictionary[hand].rawPositions[5]
             point4 = self.HandsDictionary[hand].rawPositions[17]
 
-            handOrientation1 = Util.createVector(point2, point1)
-            handOrientation2 = Util.createVector(point4, point3)
+            handOrientation1 = NewMath.createVector(point2, point1)
+            handOrientation2 = NewMath.createVector(point4, point3)
 
-            self.HandsDictionary[hand].handOrientation1 = Util.normalizeVector(handOrientation1)
-            self.HandsDictionary[hand].handOrientation2 = Util.normalizeVector(handOrientation2)
+            self.HandsDictionary[hand].handOrientation1 = NewMath.normalizeVector(handOrientation1)
+            self.HandsDictionary[hand].handOrientation2 = NewMath.normalizeVector(handOrientation2)
 
     
