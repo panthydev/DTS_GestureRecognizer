@@ -1,8 +1,7 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 import cv2
 import DetectHands
-from hand import Hand
 from CalculateHands import Calculate_Hands as CalHands
 from DetectHands import DetectHands
 from Hands_Data import HandsData
@@ -22,11 +21,11 @@ def RunDataCreation(imageList : list[np.ndarray]) -> list[HandsData]:
     handsDataList = []
 
     for image in imageList:
-            handsData = HandsData()
-            detectionResults = DetectHands.DetectHandsImage(DetectHands, image)
+        handsData = HandsData()
+        detectionResults = DetectHands.DetectHandsImage(DetectHands, image)
 
-            handsData.UpdateHandObjects(detectionResults)
-            handsDataList.append(handsData)
+        handsData.UpdateHandObjects(detectionResults)
+        handsDataList.append(handsData)
 
 
     return handsDataList

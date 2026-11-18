@@ -1,8 +1,6 @@
 ﻿import csv
 import json
 import pathlib
-import sys
-import os
 from pathlib import Path
 
 import cv2
@@ -35,7 +33,6 @@ def RunDataSetCreation(path : str):
             HandsDataList = OtherMain.RunDataCreation(imageList)
 
 
-            #writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
             writer = csv.writer(csvFile)
             writer.writerow(fieldnames)
             #writer.writeheader()

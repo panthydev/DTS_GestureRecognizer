@@ -1,13 +1,11 @@
 import cv2
 import DetectHands
-from hand import Hand
 from CalculateHands import Calculate_Hands as CalHands
 from DetectHands import DetectHands
 from Hands_Data import HandsData
 import GestureComparitor as GestureCom
 import Util
 from DB import DBHandler as DBH
-import msvcrt
 import keyboard
 
 
@@ -34,9 +32,10 @@ def RunLiveComparison():
             detectionResults = DetectHands.DetectHandsImage(DetectHands, imageCaptured)
 
             if len(detectionResults.hand_landmarks) == 0:
-                imageCaptured = cv2.putText(imageCaptured, "Ingen hånd", (35, 35), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                FlippedimageCaptured = cv2.flip(imageCaptured, 1)
+                FlippedimageCaptured = cv2.putText(FlippedimageCaptured, "Ingen hånd", (35, 35), cv2.FONT_HERSHEY_SIMPLEX, 1,
                                             (255, 0, 0), 2) 
-                cv2.imshow("img", imageCaptured)
+                cv2.imshow("img", FlippedimageCaptured)
                 key = cv2.waitKey(1)
                 if key == 27:
                     break
@@ -44,28 +43,16 @@ def RunLiveComparison():
 
             handsData.UpdateHandObjects(detectionResults)
 
-            #Hand: HandsData = dbHandler.GetHandById(4)
+            closetsMatch = GestureCom.CompareHandToAllGestures(handsData, DBHands)
 
-            List = [Hand]
+            drawnImage = Util.draw_landmarks(imageCaptured, detectionResults)
+            
+            flippedImage = cv2.flip(drawnImage, 1)
 
-            closestMatch = GestureCom.CompareHandToAllGestures(handsData, DBHands)
+            flippedImage = cv2.putText(flippedImage, str(closetsMatch[0]) + " " + str(closetsMatch[1].name), (35, 35),
+                                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
-            if closestMatch[0] > 0.9:
-
-                drawnImage = Util.draw_landmarks(imageCaptured, detectionResults)
-                drawnImage = cv2.putText(drawnImage, str(closestMatch[0]) + " " + str(closestMatch[1].name), (35, 35),
-                                         cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-
-                handsData.image = drawnImage
-            else:
-
-                drawnImage = Util.draw_landmarks(imageCaptured, detectionResults)
-                drawnImage = cv2.putText(drawnImage, "Confidence too low: " + str(closestMatch[0]), (35, 35),
-                                         cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-
-                handsData.image = drawnImage
-
-
+            handsData.image = flippedImage
 
             if (keypressed):
                 keypressed = False
@@ -73,7 +60,7 @@ def RunLiveComparison():
                 storedHand = dbHandler.SaveHand(handsData)
                 print("Capturing gesture, sav)ing to database, exporting image to path: ")
 
-            cv2.imshow("img", drawnImage)
+            cv2.imshow("img", flippedImage)
             key = cv2.waitKey(1)
             if key == 27:
                 break

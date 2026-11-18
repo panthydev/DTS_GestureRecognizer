@@ -1,6 +1,6 @@
 import numpy as np
 import math
-import Util
+import NewMath
 
 class Calculate_Hands: 
 
@@ -23,7 +23,7 @@ class Calculate_Hands:
         for i in range(len(landmarks)):
             for k in range(len(landmarks)):
                 if k > i:
-                    point_distance = Util.distanceBetweenPoints(landmarks, i, k)
+                    point_distance = NewMath.distanceBetweenPoints(landmarks, i, k)
                     distancesDict[i,k] = point_distance
         return(distancesDict)
 
@@ -32,7 +32,7 @@ class Calculate_Hands:
         for i in range(len(landmarks)):
             for k in range(len(landmarks)):
                 if k > i:
-                    point_angle = Util.angleBetweenPoints(landmarks, i, k)
+                    point_angle = NewMath.angleBetweenPoints(landmarks, i, k)
                     point_angle = math.degrees(point_angle) #Remove to get the angle in radians instead of degrees
                     anglesDict[i,k] = point_angle
         return(anglesDict)

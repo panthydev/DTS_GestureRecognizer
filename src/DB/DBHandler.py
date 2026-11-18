@@ -1,8 +1,6 @@
 ﻿from DB.DataBase import db
-from HandDirection import HandDirection
 from DB.HandModel import HandModel
 from Hands_Data import HandsData
-from hand import Hand
 from Util import dict_to_json, json_to_dict
 
 class DBHandler:
