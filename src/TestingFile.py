@@ -1,3 +1,6 @@
+import OtherMain
 import main
 
-main.RunLiveComparison()
+#main.RunLiveComparison()
+
+OtherMain.RunImageEvaluation("C:\\Users\\adamc\\Desktop\\test")
