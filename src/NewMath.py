@@ -29,7 +29,12 @@ def calculateVectorLenght(vector : tuple[float, float, float]):
 
 
 def normalizeVector(nonNormVector : tuple[float, float, float]):
+
+
+    if nonNormVector[0] == 0 or nonNormVector[1] == 0 or nonNormVector[2] == 0:
+        return
     vectorLenght = calculateVectorLenght(nonNormVector)
+
 
     normVector = [nonNormVector[0]/vectorLenght, nonNormVector[1]/vectorLenght, nonNormVector[2]/vectorLenght]
 

@@ -56,6 +56,11 @@ def RunImageEvaluation(path : str):
         for image in subDir.iterdir():
             if image.is_file():
                 cvImage = cv2.imread(str(image))
+
+                detectionResults = DetectHands.DetectHandsImage(DetectHands, cvImage)
+                if len(detectionResults.hand_world_landmarks) == 0:
+                    image.unlink()
+                    continue
                 imageList.append(cvImage)
 
         for image in imageList:
