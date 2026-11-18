@@ -1,13 +1,11 @@
 import cv2
 import DetectHands
-from hand import Hand
 from CalculateHands import Calculate_Hands as CalHands
 from DetectHands import DetectHands
 from Hands_Data import HandsData
 import GestureComparitor as GestureCom
 import Util
 from DB import DBHandler as DBH
-import msvcrt
 import keyboard
 
 def RunLiveComparison():
@@ -43,10 +41,6 @@ def RunLiveComparison():
                 continue
 
             handsData.UpdateHandObjects(detectionResults)
-
-            #Hand: HandsData = dbHandler.GetHandById(4)
-
-            List = [Hand]
 
             closetsMatch = GestureCom.CompareHandToAllGestures(handsData, DBHands)
 

@@ -1,6 +1,5 @@
 import math
 
-
 def distanceBetweenPoints(landmarks, point2, point1) -> float:
     pointDistance = math.sqrt((landmarks[point2].x - landmarks[point1].x) ** 2+(landmarks[point2].y-landmarks[point1].y) ** 2+(landmarks[point2].z-landmarks[point1].z) ** 2)
     return pointDistance
@@ -15,15 +14,15 @@ def createVector(point1 : tuple [float, float, float], point2 : tuple[float, flo
     return vector
 
 def DotProduct(vectorA : tuple, vectorB : tuple) -> float: 
-    DotProduct = (vectorA[0] * vectorB[0]) + (vectorA[1] * vectorB[1]) + (vectorA[2] * vectorB[2])
-    return DotProduct
+    dotProduct = (vectorA[0] * vectorB[0]) + (vectorA[1] * vectorB[1]) + (vectorA[2] * vectorB[2])
+    return dotProduct
+
+def CalOppositeVector(vector : tuple[float, float, float]) -> tuple[float, float, float]:
+    oppositeVector = tuple[vector[0] * -1, vector[1] * -1, vector[2] * -1]
+    return oppositeVector
+
 
 def calculateVectorLenght(vector : tuple[float, float, float]):
-    #listToUse = [1, 4 ,6]
-    #newTuple = tuple(listToUse)
-
-    #newTuple = (1, 4 ,6)
-    
     vectorLenght = math.sqrt(vector[0]**2 + vector[1]**2 + vector[2]**2)
     return vectorLenght
 

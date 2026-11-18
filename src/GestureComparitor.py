@@ -99,6 +99,7 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
     DBOrientationList = [DBHand.handOrientation1, DBHand.handOrientation2]
     currentHandOrientationList = [CurrentHand.handOrientation1, CurrentHand.handOrientation2]
     finalCosineSimilarityScore = 0
+
     i = 0
     for currentHandOrientation in currentHandOrientationList:  
         dotProduct = NewMath.DotProduct(currentHandOrientation, DBOrientationList[i])

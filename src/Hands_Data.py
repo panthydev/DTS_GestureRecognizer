@@ -1,8 +1,5 @@
 ﻿from hand import Hand
-import HandDirection
 from CalculateHands import Calculate_Hands as CalHands
-import mediapipe as mp
-import Util
 import NewMath
 
 class HandsData:
