@@ -36,6 +36,9 @@ class HandsData:
 
             self.HandsDictionary[handDirection].handFactor = DetectionResults.handedness[i][0].score
 
+        for rawPosition in self.HandsDictionary["Left"].rawPositions:
+            rawPosition.x = rawPosition.x * -1
+
     def MergeHands(self):
         h = 0
         for hand in self.HandsDictionary:

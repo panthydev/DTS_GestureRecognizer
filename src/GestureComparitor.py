@@ -107,8 +107,9 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
         #currentHandOrientationList = [CurrentHand.handOrientation1, NewMath.CalOppositeVector(CurrentHand.handOrientation2)]
 
         if(abs(CurrentHand.handOrientation1[1]) > 0.8):
-            currentHandOrientationList = [CurrentHand.handOrientation1, NewMath.CalOppositeVector(CurrentHand.handOrientation2)]
-    
+            #currentHandOrientationList = [CurrentHand.handOrientation1, NewMath.CalOppositeVector(CurrentHand.handOrientation2)]
+            currentHandOrientationList = [CurrentHand.handOrientation1, CurrentHand.handOrientation2]
+
     finalCosineSimilarityScore = 0
 
     i = 0
