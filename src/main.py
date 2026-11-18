@@ -8,6 +8,7 @@ import Util
 from DB import DBHandler as DBH
 import keyboard
 
+
 def RunLiveComparison():
     global keypressed
     keypressed = False

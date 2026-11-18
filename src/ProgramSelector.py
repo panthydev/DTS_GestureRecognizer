@@ -1,4 +1,5 @@
 ﻿import sys
+import OtherMain
 import DatasetCreation
 import main
 
@@ -13,6 +14,12 @@ if len(sys.argv)>1:
         main.RunLiveComparison()
     elif sys.argv[1] == "-help" or sys.argv[1] == "-h" or sys.argv[1] == "help":
         print("You can run ProgramSelector with these launch options: blah blah blah")
+    elif sys.argv[1] == "-IGE" or sys.argv[1] == "ImageGestureEvaluation":
+        if 3 == len(sys.argv):
+            print("Running ImageGestureEvaluation")
+            print("Total arguments:", len(sys.argv))
+            print("Running evaluation on images at input path: " + sys.argv[2])
+            OtherMain.RunImageEvaluation(sys.argv[2])
     elif sys.argv[1] == "-ML" or sys.argv[1] == "-MachineLearning":
         if 3 == len(sys.argv):
             #check if path is actually a valid path
