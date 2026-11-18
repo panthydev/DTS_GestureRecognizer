@@ -67,11 +67,18 @@ def RunImageEvaluation(path : str):
             handsDataList.append(handsData)
 
         index = 0
+        f1 = open(str(subDir.name) + ".txt", "w")
         for handsData in handsDataList:
             print("running comparison for each hand")
             index += 1
 
-            value = GestureCom.CompareHandToAllGestures(handsData, AllhandsData)
-            print(str(index) + str(value) + "\n")
+            closestMatch = GestureCom.CompareHandToAllGestures(handsData, AllhandsData)
+
+
+
+            f1.write(str(closestMatch[1]) + str(closestMatch[0]) + "\n")
+        f1.close()
+
+
 
 
