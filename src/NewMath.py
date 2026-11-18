@@ -18,7 +18,8 @@ def DotProduct(vectorA : tuple, vectorB : tuple) -> float:
     return dotProduct
 
 def CalOppositeVector(vector : tuple[float, float, float]) -> tuple[float, float, float]:
-    oppositeVector = tuple[vector[0] * -1, vector[1] * -1, vector[2] * -1]
+    oppositeVector = [vector[0] * -1, vector[1] * -1, vector[2] * -1]
+    oppositeVector = tuple(oppositeVector)
     return oppositeVector
 
 

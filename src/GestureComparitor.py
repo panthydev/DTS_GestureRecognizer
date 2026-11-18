@@ -96,8 +96,19 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
     finalAngleScore = SumOfAngleWeightedSimilarties / SumOfAngleWeights
 
 
+
     DBOrientationList = [DBHand.handOrientation1, DBHand.handOrientation2]
-    currentHandOrientationList = [CurrentHand.handOrientation1, CurrentHand.handOrientation2]
+    currentHandOrientationList = []
+
+    if(len(CurrentHand.HandsDictionary["Right"].rawPositions) != 0):
+        currentHandOrientationList = [CurrentHand.handOrientation1, CurrentHand.handOrientation2]
+        print("Hello")
+    else:
+        #currentHandOrientationList = [CurrentHand.handOrientation1, NewMath.CalOppositeVector(CurrentHand.handOrientation2)]
+
+        if(abs(CurrentHand.handOrientation1[1]) > 0.8):
+            currentHandOrientationList = [CurrentHand.handOrientation1, NewMath.CalOppositeVector(CurrentHand.handOrientation2)]
+    
     finalCosineSimilarityScore = 0
 
     i = 0
@@ -114,7 +125,13 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
 
     finalCosineSimilarityScore = finalCosineSimilarityScore / 2
 
-    finalScore = (finalDistanceScore + finalAngleScore + (finalCosineSimilarityScore)) / 3 # we can modify this later and weigh angle or distance more if needed
+    DistanceWeight = 40
+    AngleWeight = 40
+    OrientationWeight = 30
+
+    finalScore = ((finalDistanceScore * DistanceWeight) + (finalAngleScore * AngleWeight) + (finalCosineSimilarityScore * OrientationWeight)) / (DistanceWeight + AngleWeight + OrientationWeight) # we can modify this later and weigh angle or distance more if needed
+
+    #finalScore = (finalDistanceScore + finalAngleScore + finalCosineSimilarityScore)/3
 
     return finalScore
 
