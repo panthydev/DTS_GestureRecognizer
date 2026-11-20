@@ -1,5 +1,4 @@
 from pathlib import Path
-
 import cv2
 import DetectHands
 from CalculateHands import Calculate_Hands as CalHands
@@ -7,14 +6,16 @@ from DetectHands import DetectHands
 from Hands_Data import HandsData
 import GestureComparitor as GestureCom
 import Util
-import msvcrt
-import keyboard
 from DB.DBHandler import DBHandler as DBH
 import numpy as np
 
 
 
 def RunDataCreation(imageList : list[np.ndarray]) -> list[HandsData]:
+
+
+
+
 
 
     CalHands.CreateKeys(CalHands, 42)
@@ -46,11 +47,25 @@ def RunImageEvaluation(path : str):
 
     subDirs = [f for f in path.iterdir() if f.is_dir()]
 
-
+    ConfusionMatrix = []
     handsDataList = []
 
+    Otherindex = 0
     for subDir in subDirs:
+        Otherindex += 1
         imageList = []
+
+        Dict = {}
+        OtherDict = {}
+
+
+        for i in range(65, 65+25):
+            if i == 74 : continue
+            letter = chr(i)
+            OtherDict[str(letter)] = 0
+        OtherDict[str(chr(198))] = 0
+        Dict[str(subDir.name)] = OtherDict
+        ConfusionMatrix.append(Dict)
 
         print("Reading images from:" + str(subDir))
         for image in subDir.iterdir():
@@ -71,19 +86,35 @@ def RunImageEvaluation(path : str):
             handsData.UpdateHandObjects(detectionResults)
             handsDataList.append(handsData)
 
-        index = 0
+
         f1 = open(str(subDir.name) + ".txt", "w")
         for handsData in handsDataList:
             print("running comparison for each hand")
-            index += 1
+
 
             closestMatch = GestureCom.CompareHandToAllGestures(handsData, AllhandsData)
 
 
+            if(subDir.name == "AE"):
+                index = 1
+                string = closestMatch[1].name.replace("!", "")
+               # string = string.lower()
+                ConfusionMatrix[index]["AE"][string] += 1
+            elif(subDir.name == "K"):
+                index = 10
+                string = closestMatch[1].name.replace("!", "")
+                # string = string.lower()
+                ConfusionMatrix[index]["K"][string] += 1
+            else:
+                index = 65 - ord(subDir.name) -1
+                index = abs(index) # could just ue confusion matrix length as index here.
+                if index >= 12:
+                    index = index -1
+                if(index == 1): continue
+                string = closestMatch[1].name.replace("!", "")
+                ConfusionMatrix[index][subDir.name][string] += 1
+
 
             f1.write(str(closestMatch[1]) + str(closestMatch[0]) + "\n")
         f1.close()
-
-
-
-
+    print("Confusion Matrix: " + str(ConfusionMatrix))
