@@ -1,3 +1,4 @@
+import csv
 from pathlib import Path
 import cv2
 import DetectHands
@@ -10,14 +11,7 @@ from DB.DBHandler import DBHandler as DBH
 import numpy as np
 
 
-
-def RunDataCreation(imageList : list[np.ndarray]) -> list[HandsData]:
-
-
-
-
-
-
+def RunDataCreation(imageList: list[np.ndarray]) -> list[HandsData]:
     CalHands.CreateKeys(CalHands, 42)
     handsDataList = []
 
@@ -28,7 +22,6 @@ def RunDataCreation(imageList : list[np.ndarray]) -> list[HandsData]:
         handsData.UpdateHandObjects(detectionResults)
         handsDataList.append(handsData)
 
-
     return handsDataList
 
 
@@ -36,7 +29,7 @@ def ShowEvalComparison(CurrentDirString, EvaluatedGestureString):
     print("CORRECT LETTER: " + str(CurrentDirString) + ", GUESSED LETTER: " + str(EvaluatedGestureString))
 
 
-def RunImageEvaluation(path : str):
+def RunImageEvaluation(path: str):
     dbHandler = DBH()
     AllhandsData = dbHandler.GetAllHands()
 
@@ -48,24 +41,23 @@ def RunImageEvaluation(path : str):
     print("Path:", path)
 
     ResultDirectory = Path("HandCraftedResults")
-    ResultDirectory.mkdir(exist_ok=True, parents=True) #creates result folder
+    ResultDirectory.mkdir(exist_ok=True, parents=True)  # creates result folder
 
     subDirs = [f for f in path.iterdir() if f.is_dir()]
 
     ConfusionMatrix = []
-    handsDataList = []
 
     Otherindex = 0
     for subDir in subDirs:
+        handsDataList = []
         Otherindex += 1
         imageList = []
 
         Dict = {}
         OtherDict = {}
 
-
-        for i in range(65, 65+25):
-            if i == 74 : continue
+        for i in range(65, 65 + 25):
+            if i == 74: continue
             letter = chr(i)
             OtherDict[str(letter)] = 0
         OtherDict[str(chr(198))] = 0
@@ -84,52 +76,74 @@ def RunImageEvaluation(path : str):
                 imageList.append(cvImage)
 
         for image in imageList:
-
             handsData = HandsData()
             detectionResults = DetectHands.DetectHandsImage(DetectHands, image)
 
             handsData.UpdateHandObjects(detectionResults)
             handsDataList.append(handsData)
 
-
-        f1 = open(str(subDir.name) + ".txt", "w")
         for handsData in handsDataList:
-
-
 
             closestMatch = GestureCom.CompareHandToAllGestures(handsData, AllhandsData)
 
-
-            if(subDir.name == "AE"):
+            if (subDir.name == "AE"):
                 index = 1
                 string = closestMatch[1].name.replace("!", "")
-               # string = string.lower()
+                # string = string.lower()
                 ConfusionMatrix[index]["AE"][string] += 1
 
                 ShowEvalComparison(subDir.name, string)
-            elif(subDir.name == "K"):
+            elif (subDir.name == "K"):
                 index = 10
                 string = closestMatch[1].name.replace("!", "")
                 # string = string.lower()
                 ConfusionMatrix[index]["K"][string] += 1
 
                 ShowEvalComparison(subDir.name, string)
-            elif(subDir.name == "A"):
+            elif (subDir.name == "A"):
                 index = 0
                 string = closestMatch[1].name.replace("!", "")
                 ConfusionMatrix[index][subDir.name][string] += 1
                 ShowEvalComparison(subDir.name, string)
             else:
-                index = 65 - ord(subDir.name) -1
-                index = abs(index) # could just ue confusion matrix length as index here.
+                index = 65 - ord(subDir.name) - 1
+                index = abs(index)  # could just ue confusion matrix length as index here.
                 if index >= 12:
-                    index = index -1
-                if(index == 1): continue
+                    index = index - 1
+                if (index == 1): continue
                 string = closestMatch[1].name.replace("!", "")
                 ConfusionMatrix[index][subDir.name][string] += 1
                 ShowEvalComparison(subDir.name, string)
 
+    with open(ResultDirectory / f"ConfusionMatrix.csv", "w", newline='') as csvFile:
+        fieldnames1 = [" IGNORE "]
 
-            f1.write(str(closestMatch[1]) + str(closestMatch[0]) + "\n")
-        f1.close()
-    print("Confusion Matrix: " + str(ConfusionMatrix))
+        CustomAlphabetList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R",
+                              "S", "T", "U", "V", "W", "X", "Y", "Æ"]
+
+        fieldnames = [l for l in CustomAlphabetList]
+        fieldnames1.extend(fieldnames)
+
+        writer = csv.writer(csvFile)
+        writer.writerow(fieldnames1)
+
+
+
+
+        ÆDict = ConfusionMatrix.pop(1)
+        newKVP = {"Æ" : ÆDict["AE"] }
+        ConfusionMatrix.append(newKVP)
+
+
+
+        for outerDictionary in ConfusionMatrix:
+
+            KeyToAccessInnerDictionary = list(outerDictionary.keys())
+            KeyToAccessInnerDictionary = KeyToAccessInnerDictionary[0]
+
+            finalList = [str(KeyToAccessInnerDictionary)]
+
+            for value in outerDictionary[KeyToAccessInnerDictionary].values():
+                finalList.append(value)
+            writer.writerow(finalList)
+            continue

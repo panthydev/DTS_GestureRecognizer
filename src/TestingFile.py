@@ -1,5 +1,4 @@
 import OtherMain
-import main
 
 #main.RunLiveComparison()
 
