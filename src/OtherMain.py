@@ -31,6 +31,11 @@ def RunDataCreation(imageList : list[np.ndarray]) -> list[HandsData]:
 
     return handsDataList
 
+
+def ShowEvalComparison(CurrentDirString, EvaluatedGestureString):
+    print("CORRECT LETTER: " + str(CurrentDirString) + ", GUESSED LETTER: " + str(EvaluatedGestureString))
+
+
 def RunImageEvaluation(path : str):
     dbHandler = DBH()
     AllhandsData = dbHandler.GetAllHands()
@@ -79,7 +84,7 @@ def RunImageEvaluation(path : str):
                 imageList.append(cvImage)
 
         for image in imageList:
-            print("Creating Hand data for individual image")
+
             handsData = HandsData()
             detectionResults = DetectHands.DetectHandsImage(DetectHands, image)
 
@@ -89,7 +94,7 @@ def RunImageEvaluation(path : str):
 
         f1 = open(str(subDir.name) + ".txt", "w")
         for handsData in handsDataList:
-            print("running comparison for each hand")
+
 
 
             closestMatch = GestureCom.CompareHandToAllGestures(handsData, AllhandsData)
@@ -100,11 +105,20 @@ def RunImageEvaluation(path : str):
                 string = closestMatch[1].name.replace("!", "")
                # string = string.lower()
                 ConfusionMatrix[index]["AE"][string] += 1
+
+                ShowEvalComparison(subDir.name, string)
             elif(subDir.name == "K"):
                 index = 10
                 string = closestMatch[1].name.replace("!", "")
                 # string = string.lower()
                 ConfusionMatrix[index]["K"][string] += 1
+
+                ShowEvalComparison(subDir.name, string)
+            elif(subDir.name == "A"):
+                index = 0
+                string = closestMatch[1].name.replace("!", "")
+                ConfusionMatrix[index][subDir.name][string] += 1
+                ShowEvalComparison(subDir.name, string)
             else:
                 index = 65 - ord(subDir.name) -1
                 index = abs(index) # could just ue confusion matrix length as index here.
@@ -113,6 +127,7 @@ def RunImageEvaluation(path : str):
                 if(index == 1): continue
                 string = closestMatch[1].name.replace("!", "")
                 ConfusionMatrix[index][subDir.name][string] += 1
+                ShowEvalComparison(subDir.name, string)
 
 
             f1.write(str(closestMatch[1]) + str(closestMatch[0]) + "\n")
