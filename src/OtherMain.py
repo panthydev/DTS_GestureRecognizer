@@ -46,12 +46,17 @@ def RunImageEvaluation(path: str):
     subDirs = [f for f in path.iterdir() if f.is_dir()]
 
     ConfusionMatrix = []
+    ConfidenceList = [] 
 
     Otherindex = 0
     for subDir in subDirs:
         handsDataList = []
         Otherindex += 1
         imageList = []
+        
+        confidenceForSubDir = 0
+
+        ListOfConfidencesSubDir = []
 
         Dict = {}
         OtherDict = {}
@@ -86,6 +91,9 @@ def RunImageEvaluation(path: str):
 
             closestMatch = GestureCom.CompareHandToAllGestures(handsData, AllhandsData)
 
+            ListOfConfidencesSubDir.append(closestMatch[0])
+
+
             if (subDir.name == "AE"):
                 index = 1
                 string = closestMatch[1].name.replace("!", "")
@@ -115,6 +123,16 @@ def RunImageEvaluation(path: str):
                 ConfusionMatrix[index][subDir.name][string] += 1
                 ShowEvalComparison(subDir.name, string)
 
+        for confidence in ListOfConfidencesSubDir:
+            confidenceForSubDir += confidence
+
+        confidenceForSubDir = confidenceForSubDir / len(ListOfConfidencesSubDir)
+
+        confidenceForSubDir = f'{confidenceForSubDir:.2%}'
+
+        ConfidenceList.append(confidenceForSubDir)
+
+
     with open(ResultDirectory / f"ConfusionMatrix.csv", "w", newline='') as csvFile:
         fieldnames1 = [" IGNORE "]
 
@@ -126,9 +144,6 @@ def RunImageEvaluation(path: str):
 
         writer = csv.writer(csvFile)
         writer.writerow(fieldnames1)
-
-
-
 
         ÆDict = ConfusionMatrix.pop(1)
         newKVP = {"Æ" : ÆDict["AE"] }
@@ -147,3 +162,20 @@ def RunImageEvaluation(path: str):
                 finalList.append(value)
             writer.writerow(finalList)
             continue
+
+    with open(ResultDirectory / f"ConfidenceMatrix.csv", "w", newline='') as csvFile:
+            CustomAlphabetList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R",
+                                  "S", "T", "U", "V", "W", "X", "Y", "Æ"]
+    
+            fieldnames = [l for l in CustomAlphabetList]
+    
+            writer = csv.writer(csvFile)
+            writer.writerow(fieldnames)
+    
+            ÆConfidence = ConfidenceList.pop(1)
+
+            ConfidenceList.append(ÆConfidence)
+
+            writer.writerow(ConfidenceList)
+
+    
