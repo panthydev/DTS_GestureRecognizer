@@ -1,4 +1,3 @@
-import csv
 from pathlib import Path
 import cv2
 import DetectHands
@@ -9,6 +8,8 @@ import GestureComparitor as GestureCom
 import Util
 from DB.DBHandler import DBHandler as DBH
 import numpy as np
+from WriteCSV import WriteConfidenceMatrix
+from WriteCSV import WriteConfusionMatrix
 
 
 def RunDataCreation(imageList: list[np.ndarray]) -> list[HandsData]:
@@ -61,11 +62,13 @@ def RunImageEvaluation(path: str):
         Dict = {}
         OtherDict = {}
 
-        for i in range(65, 65 + 25):
-            if i == 74: continue
-            letter = chr(i)
+        customAlphabetList = ["A", "AE", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"]
+
+        for letter in customAlphabetList:
             OtherDict[str(letter)] = 0
-        OtherDict[str(chr(198))] = 0
+
+        #OtherDict[str(chr(198))] = 0
+
         Dict[str(subDir.name)] = OtherDict
         ConfusionMatrix.append(Dict)
 
@@ -87,41 +90,23 @@ def RunImageEvaluation(path: str):
             handsData.UpdateHandObjects(detectionResults)
             handsDataList.append(handsData)
 
+        index = 0
         for handsData in handsDataList:
-
+            
             closestMatch = GestureCom.CompareHandToAllGestures(handsData, AllhandsData)
 
             ListOfConfidencesSubDir.append(closestMatch[0])
 
+            string = closestMatch[1].name.replace("!", "")
 
-            if (subDir.name == "AE"):
-                index = 1
-                string = closestMatch[1].name.replace("!", "")
-                # string = string.lower()
-                ConfusionMatrix[index]["AE"][string] += 1
+            if(string == "Æ"):
+                string = "AE"
 
-                ShowEvalComparison(subDir.name, string)
-            elif (subDir.name == "K"):
-                index = 10
-                string = closestMatch[1].name.replace("!", "")
-                # string = string.lower()
-                ConfusionMatrix[index]["K"][string] += 1
+            index = customAlphabetList.index(str(subDir.name))
 
-                ShowEvalComparison(subDir.name, string)
-            elif (subDir.name == "A"):
-                index = 0
-                string = closestMatch[1].name.replace("!", "")
-                ConfusionMatrix[index][subDir.name][string] += 1
-                ShowEvalComparison(subDir.name, string)
-            else:
-                index = 65 - ord(subDir.name) - 1
-                index = abs(index)  # could just ue confusion matrix length as index here.
-                if index >= 12:
-                    index = index - 1
-                if (index == 1): continue
-                string = closestMatch[1].name.replace("!", "")
-                ConfusionMatrix[index][subDir.name][string] += 1
-                ShowEvalComparison(subDir.name, string)
+            ConfusionMatrix[index][subDir.name][string] += 1
+            ShowEvalComparison(subDir.name, string)
+            
 
         for confidence in ListOfConfidencesSubDir:
             confidenceForSubDir += confidence
@@ -132,50 +117,5 @@ def RunImageEvaluation(path: str):
 
         ConfidenceList.append(confidenceForSubDir)
 
-
-    with open(ResultDirectory / f"ConfusionMatrix.csv", "w", newline='') as csvFile:
-        fieldnames1 = [" IGNORE "]
-
-        CustomAlphabetList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R",
-                              "S", "T", "U", "V", "W", "X", "Y", "Æ"]
-
-        fieldnames = [l for l in CustomAlphabetList]
-        fieldnames1.extend(fieldnames)
-
-        writer = csv.writer(csvFile)
-        writer.writerow(fieldnames1)
-
-        ÆDict = ConfusionMatrix.pop(1)
-        newKVP = {"Æ" : ÆDict["AE"] }
-        ConfusionMatrix.append(newKVP)
-
-
-
-        for outerDictionary in ConfusionMatrix:
-
-            KeyToAccessInnerDictionary = list(outerDictionary.keys())
-            KeyToAccessInnerDictionary = KeyToAccessInnerDictionary[0]
-
-            finalList = [str(KeyToAccessInnerDictionary)]
-
-            for value in outerDictionary[KeyToAccessInnerDictionary].values():
-                finalList.append(value)
-            writer.writerow(finalList)
-            continue
-
-    with open(ResultDirectory / f"ConfidenceMatrix.csv", "w", newline='') as csvFile:
-            CustomAlphabetList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R",
-                                  "S", "T", "U", "V", "W", "X", "Y", "Æ"]
-    
-            fieldnames = [l for l in CustomAlphabetList]
-    
-            writer = csv.writer(csvFile)
-            writer.writerow(fieldnames)
-    
-            ÆConfidence = ConfidenceList.pop(1)
-
-            ConfidenceList.append(ÆConfidence)
-
-            writer.writerow(ConfidenceList)
-
-    
+    WriteConfusionMatrix(ConfusionMatrix, ResultDirectory)
+    WriteConfidenceMatrix(ConfidenceList, ResultDirectory)
