@@ -36,16 +36,11 @@ def WriteConfusionMatrix(ConfusionMatrix, ResultDirectory):
 
 def WriteConfidenceMatrix(ConfidenceList, ResultDirectory):
     with open(ResultDirectory / f"ConfidenceMatrix.csv", "w", newline='') as csvFile:
-        CustomAlphabetList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R",
-                                      "S", "T", "U", "V", "W", "X", "Y", "Æ"]
+        CustomAlphabetList = ["A", "AE", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"]
         
         fieldnames = [l for l in CustomAlphabetList]
         
         writer = csv.writer(csvFile)
         writer.writerow(fieldnames)
-        
-        ÆConfidence = ConfidenceList.pop(1)
-    
-        ConfidenceList.append(ÆConfidence)
     
         writer.writerow(ConfidenceList)
