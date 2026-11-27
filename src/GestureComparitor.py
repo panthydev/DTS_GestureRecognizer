@@ -38,40 +38,37 @@ def KeySafetyCheck(CurrentKey : tuple[int, int],  DBHand : HandsData) -> bool:
     else :
         return False
 
-
-
-# returns the "score" IE how well a gesture matches the DB gesture
-def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> float:
-
+def CalculateDistanceScore(CurrentHand : HandsData, DBHand : HandsData):
     SumOfDistanceWeightedSimilarties = 0
     SumOfDistanceWeights = 0
 
-
     #PairDistance is the key
     for PairDistance in CurrentHand.pairWiseDistances:
-
+    
         if not KeySafetyCheck(PairDistance, DBHand): break
-
+    
         weight = DBHand.pairWiseDistanceWeights[PairDistance]
         CurrentDistance = CurrentHand.pairWiseDistances[PairDistance]
         IdealDistance = DBHand.pairWiseDistances[PairDistance]
-
-
+    
         #calculate difference
         difference = abs(CurrentDistance - IdealDistance)
-
+    
         #calc similarity, will never be negative
         #similarity = max(0, (1 - difference) / 1)
         similarity = 1 - abs(difference) / (CurrentDistance + IdealDistance)
-
+    
         SumOfDistanceWeights += weight
-
+    
         weightedSimilarity = similarity * weight
-
+    
         SumOfDistanceWeightedSimilarties += weightedSimilarity
 
     finalDistanceScore = SumOfDistanceWeightedSimilarties / SumOfDistanceWeights
 
+    return finalDistanceScore
+
+def CalculateAngleScore(CurrentHand : HandsData, DBHand : HandsData):
     SumOfAngleWeightedSimilarties = 0
     SumOfAngleWeights = 0
 
@@ -80,43 +77,53 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
         weight = DBHand.pairWiseAngleWeights[PairAngles]
         CurrentDistance = CurrentHand.pairWiseAngles[PairAngles]
         IdealDistance = DBHand.pairWiseAngles[PairAngles]
-
+    
         # calculate difference
         difference = abs(CurrentDistance - IdealDistance)
-
+    
         # calc similarity, will never be negative
         similarity = 1- abs(difference) / (CurrentDistance + IdealDistance)
-
+    
         SumOfAngleWeights += weight
-
+    
         weightedSimilarity = similarity * weight
-
+    
         SumOfAngleWeightedSimilarties += weightedSimilarity
-
+    
     finalAngleScore = SumOfAngleWeightedSimilarties / SumOfAngleWeights
+    return finalAngleScore
 
 
-
+def CalculateOrientationScore(CurrentHand : HandsData, DBHand : HandsData):
     DBOrientationList = [DBHand.handOrientation1, DBHand.handOrientation2]
     currentHandOrientationList = []
-
+        
     currentHandOrientationList = [CurrentHand.handOrientation1, CurrentHand.handOrientation2]
-
+        
     finalCosineSimilarityScore = 0
 
     i = 0
     for currentHandOrientation in currentHandOrientationList:  
         dotProduct = NewMath.DotProduct(currentHandOrientation, DBOrientationList[i])
-
+    
         cosineSimilarity = dotProduct
-
+    
         cosineSimilarity = (cosineSimilarity + 1) * 0.5
-
+    
         finalCosineSimilarityScore += cosineSimilarity
-
+    
         i += 1
-
+    
     finalCosineSimilarityScore = finalCosineSimilarityScore / 2
+    return finalCosineSimilarityScore
+
+
+# returns the "score" IE how well a gesture matches the DB gesture
+def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> float:
+
+    finalDistanceScore = CalculateDistanceScore(CurrentHand, DBHand)
+    finalAngleScore = CalculateAngleScore(CurrentHand, DBHand)
+    finalCosineSimilarityScore = CalculateOrientationScore(CurrentHand, DBHand)
 
     DistanceWeight = 40
     AngleWeight = 40
@@ -124,16 +131,4 @@ def CompareGestureToDBGesture(CurrentHand : HandsData, DBHand : HandsData) -> fl
 
     finalScore = ((finalDistanceScore * DistanceWeight) + (finalAngleScore * AngleWeight) + (finalCosineSimilarityScore * OrientationWeight)) / (DistanceWeight + AngleWeight + OrientationWeight) # we can modify this later and weigh angle or distance more if needed
 
-    #finalScore = (finalDistanceScore + finalAngleScore + finalCosineSimilarityScore)/3
-
     return finalScore
-
-
-
-
-
-
-
-
-
-
