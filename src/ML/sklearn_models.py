@@ -1,7 +1,7 @@
 from testData import load_csv_data
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import SGDClassifier
+from sklearn.linear_model import SGDClassifier, SGDRegressor
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import StratifiedKFold, cross_val_score, cross_val_predict
@@ -16,6 +16,10 @@ models = {
     "SVC": make_pipeline(StandardScaler(), SVC()),
     "RandomForest": RandomForestClassifier(random_state=42)
 }
+
+sgd_reg = SGDRegressor(max_iter=1000, tol=le-5, penalty=None, eta0=0.01,
+                       n_iter_no_change=100, random_state=42)
+sgd_reg.fit(X, y.ravel()) #y.ravel because fit() expects 1D targets
 
 for name, model in models.items():
     scores = cross_val_score(model, X, y, cv=cv)
