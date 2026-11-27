@@ -1,4 +1,3 @@
-import csv
 from pathlib import Path
 import cv2
 import DetectHands
@@ -9,6 +8,8 @@ import GestureComparitor as GestureCom
 import Util
 from DB.DBHandler import DBHandler as DBH
 import numpy as np
+from WriteCSV import WriteConfidenceMatrix
+from WriteCSV import WriteConfusionMatrix
 
 
 def RunDataCreation(imageList: list[np.ndarray]) -> list[HandsData]:
@@ -132,50 +133,7 @@ def RunImageEvaluation(path: str):
 
         ConfidenceList.append(confidenceForSubDir)
 
-
-    with open(ResultDirectory / f"ConfusionMatrix.csv", "w", newline='') as csvFile:
-        fieldnames1 = [" IGNORE "]
-
-        CustomAlphabetList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R",
-                              "S", "T", "U", "V", "W", "X", "Y", "Æ"]
-
-        fieldnames = [l for l in CustomAlphabetList]
-        fieldnames1.extend(fieldnames)
-
-        writer = csv.writer(csvFile)
-        writer.writerow(fieldnames1)
-
-        ÆDict = ConfusionMatrix.pop(1)
-        newKVP = {"Æ" : ÆDict["AE"] }
-        ConfusionMatrix.append(newKVP)
-
-
-
-        for outerDictionary in ConfusionMatrix:
-
-            KeyToAccessInnerDictionary = list(outerDictionary.keys())
-            KeyToAccessInnerDictionary = KeyToAccessInnerDictionary[0]
-
-            finalList = [str(KeyToAccessInnerDictionary)]
-
-            for value in outerDictionary[KeyToAccessInnerDictionary].values():
-                finalList.append(value)
-            writer.writerow(finalList)
-            continue
-
-    with open(ResultDirectory / f"ConfidenceMatrix.csv", "w", newline='') as csvFile:
-            CustomAlphabetList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R",
-                                  "S", "T", "U", "V", "W", "X", "Y", "Æ"]
-    
-            fieldnames = [l for l in CustomAlphabetList]
-    
-            writer = csv.writer(csvFile)
-            writer.writerow(fieldnames)
-    
-            ÆConfidence = ConfidenceList.pop(1)
-
-            ConfidenceList.append(ÆConfidence)
-
-            writer.writerow(ConfidenceList)
+    WriteConfusionMatrix(ConfusionMatrix, ResultDirectory)
+    WriteConfidenceMatrix(ConfidenceList, ResultDirectory)
 
     
