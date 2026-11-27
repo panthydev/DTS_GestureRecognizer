@@ -62,11 +62,13 @@ def RunImageEvaluation(path: str):
         Dict = {}
         OtherDict = {}
 
-        for i in range(65, 65 + 25):
-            if i == 74: continue
-            letter = chr(i)
+        customAlphabetList = ["A", "AE", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"]
+
+        for letter in customAlphabetList:
             OtherDict[str(letter)] = 0
-        OtherDict[str(chr(198))] = 0
+
+        #OtherDict[str(chr(198))] = 0
+
         Dict[str(subDir.name)] = OtherDict
         ConfusionMatrix.append(Dict)
 
@@ -88,41 +90,23 @@ def RunImageEvaluation(path: str):
             handsData.UpdateHandObjects(detectionResults)
             handsDataList.append(handsData)
 
+        index = 0
         for handsData in handsDataList:
-
+            
             closestMatch = GestureCom.CompareHandToAllGestures(handsData, AllhandsData)
 
             ListOfConfidencesSubDir.append(closestMatch[0])
 
+            string = closestMatch[1].name.replace("!", "")
 
-            if (subDir.name == "AE"):
-                index = 1
-                string = closestMatch[1].name.replace("!", "")
-                # string = string.lower()
-                ConfusionMatrix[index]["AE"][string] += 1
+            if(string == "Æ"):
+                string = "AE"
 
-                ShowEvalComparison(subDir.name, string)
-            elif (subDir.name == "K"):
-                index = 10
-                string = closestMatch[1].name.replace("!", "")
-                # string = string.lower()
-                ConfusionMatrix[index]["K"][string] += 1
+            index = customAlphabetList.index(str(subDir.name))
 
-                ShowEvalComparison(subDir.name, string)
-            elif (subDir.name == "A"):
-                index = 0
-                string = closestMatch[1].name.replace("!", "")
-                ConfusionMatrix[index][subDir.name][string] += 1
-                ShowEvalComparison(subDir.name, string)
-            else:
-                index = 65 - ord(subDir.name) - 1
-                index = abs(index)  # could just ue confusion matrix length as index here.
-                if index >= 12:
-                    index = index - 1
-                if (index == 1): continue
-                string = closestMatch[1].name.replace("!", "")
-                ConfusionMatrix[index][subDir.name][string] += 1
-                ShowEvalComparison(subDir.name, string)
+            ConfusionMatrix[index][subDir.name][string] += 1
+            ShowEvalComparison(subDir.name, string)
+            
 
         for confidence in ListOfConfidencesSubDir:
             confidenceForSubDir += confidence
@@ -135,5 +119,3 @@ def RunImageEvaluation(path: str):
 
     WriteConfusionMatrix(ConfusionMatrix, ResultDirectory)
     WriteConfidenceMatrix(ConfidenceList, ResultDirectory)
-
-    

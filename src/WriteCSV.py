@@ -6,18 +6,20 @@ def WriteConfusionMatrix(ConfusionMatrix, ResultDirectory):
         
         fieldnames1 = [" IGNORE "]
     
-        CustomAlphabetList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R",
-                                  "S", "T", "U", "V", "W", "X", "Y", "Æ"]
-    
+        #CustomAlphabetList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R",
+                                  #"S", "T", "U", "V", "W", "X", "Y", "Æ"]
+
+        CustomAlphabetList = ["A", "AE", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"]
+        
         fieldnames = [l for l in CustomAlphabetList]
         fieldnames1.extend(fieldnames)
     
         writer = csv.writer(csvFile)
         writer.writerow(fieldnames1)
     
-        ÆDict = ConfusionMatrix.pop(1)
-        newKVP = {"Æ" : ÆDict["AE"] }
-        ConfusionMatrix.append(newKVP)
+        #ÆDict = ConfusionMatrix.pop(1)
+        #newKVP = {"Æ" : ÆDict["AE"] }
+        #ConfusionMatrix.append(newKVP)
 
     
         for outerDictionary in ConfusionMatrix:
